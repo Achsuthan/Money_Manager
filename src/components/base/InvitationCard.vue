@@ -1,0 +1,39 @@
+<template>
+  <v-card
+    elevation="2"
+  >
+    <v-card-text class="grow pa-0">
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-subtitle
+            class="text-h4 font-weight-regular"
+          >
+            <a
+              href="https://www.google.com"
+              target="_blank"
+              class="green--text"
+            >
+              View Link
+            </a>
+          </v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-content class="text-right">
+          <v-col>
+            <v-icon
+              class="mr-8"
+              color="primary"
+            >
+              mdi-pencil
+            </v-icon>
+            <v-icon
+              class="mr-0"
+              color="red"
+            >
+              mdi-delete
+            </v-icon>
+          </v-col>
+        </v-list-item-content>
+      </v-list-item>
+    </v-card-text>
+  </v-card>
+</template>
