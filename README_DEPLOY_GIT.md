@@ -8,14 +8,16 @@ Create the branch Ex: gh-pages
 Step 2 : 
 In the vue.config.js file adde the code 
 
-``
+
+
+```sh
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
     ? '/REPO_NAME/'
     : '/'
 }
 
-``
+```
 
 Step 3:
 If there is a ``.gitignore`` file remove the ``/dist``
