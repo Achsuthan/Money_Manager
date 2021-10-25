@@ -63,65 +63,9 @@
                 cols="12"
                 md="6"
               >
-                <v-card to="group_info">
-                  <v-card-text>
-                    <v-list-item
-                      class="grow"
-                      two-line
-                    >
-                      <v-avatar
-                        class="mr-4"
-                        color="orange"
-                        size="62"
-                      >
-                        <span class="white--text text-h5 white--text">D</span>
-                      </v-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title
-                          class="text-h5 font-weight-regular"
-                        >
-                          Dirty Mind
-                        </v-list-item-title>
-                        <v-list-item-subtitle>You owes Senthuran $13</v-list-item-subtitle>
-                      </v-list-item-content>
-                      <v-list-item-content class="text-right">
-                        <v-list-item-subtitle class="text-h4 green--text">
-                          You owed $13
-                        </v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-card-text>
-                </v-card>
-
-                <v-card to="group_info">
-                  <v-card-text>
-                    <v-list-item
-                      class="grow"
-                      two-line
-                    >
-                      <v-avatar
-                        class="mr-2"
-                        color="orange"
-                        size="62"
-                      >
-                        <span class="white--text text-h5">D</span>
-                      </v-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title
-                          class="text-h5 font-weight-regular"
-                        >
-                          Dirty Mind
-                        </v-list-item-title>
-                        <v-list-item-subtitle>You owes Senthuran $13</v-list-item-subtitle>
-                      </v-list-item-content>
-                      <v-list-item-content class="text-right">
-                        <v-list-item-subtitle class="text-h4 green--text">
-                          You owed $13
-                        </v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-card-text>
-                </v-card>
+                <template v-for="item in groups">
+                  <single-gorup-card :key="item.groupId" :groupName="item.groupName" :isOwner="item.isOwner"/>
+                </template>
               </v-col>
             </v-row>
           </v-card-text>
@@ -132,7 +76,33 @@
 </template>
 
 <script>
+import SingleGorupCard from '../../../../components/base/SingleGorupCard.vue';
+import GroupService from "../../../../services/groups";
+import AlertService from '../../../../utils/alertHandle'
   export default {
-    //
+  components: { SingleGorupCard },
+    data: () => ({
+      groups: [],
+    }),
+    created(){
+      this.getAllGroups();
+    },
+    methods:{
+      getAllGroups(){
+        const payload = {
+          userId: JSON.parse(localStorage.getItem("user")).userId
+        }
+        GroupService.getAllGroups(payload)
+        .then(res =>{
+          console.log(res);
+          if(res.data.body.group){
+            this.groups = res.data.body.group;
+          }
+        })
+        .catch(res=>{
+          AlertService.errorMessage(res.message)
+        })
+      }
+    }
   }
 </script>

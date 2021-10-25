@@ -15,8 +15,8 @@
         </v-list-item-content>
         <v-list-item-content class="text-right">
           <v-col>
-            <v-icon class="mr-0" color="red" v-on:click="deleteInvite()"> mdi-delete </v-icon>
-            <v-icon v-if="isReceive" class="ml-4" color="green" v-on:click="acceptInvitation()"> mdi-check </v-icon>
+            <!-- <v-icon class="mr-0" color="red" v-on:click="deleteInvite()"> mdi-delete </v-icon> -->
+            <v-icon v-if="isReceive" class="ml-4" color="green" v-on:click="$emit('acceptInvite',inviteId)"> mdi-check </v-icon>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -37,14 +37,6 @@ export default {
   }),
   created(){
     this.siteBaseUrl = Config.siteBaseUrl
-  },
-  methods: {
-    deleteInvite(){
-      console.log("delete invitation")
-    },
-    acceptInvitation(){
-      console.log("accept invitation")
-    }
   },
 };
 </script>

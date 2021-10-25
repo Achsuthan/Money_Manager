@@ -15,7 +15,7 @@
         </v-list-item-content>
         <v-list-item-content class="text-right">
           <v-col>
-            <v-icon class="mr-0" color="red" v-on:click="deleteInvite()"> mdi-delete </v-icon>
+            <!-- <v-icon class="mr-0" color="red" v-on:click="deleteInvite()"> mdi-delete </v-icon> -->
           </v-col>
         </v-list-item-content>
       </v-list-item>

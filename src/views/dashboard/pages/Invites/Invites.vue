@@ -54,17 +54,17 @@
             </v-list-item-title>
 
             <template v-for="item in rceiveInvites">
-              <base-group-invitation-card :key="item.groupInviteId" :link="item.inviteLink" :inviteId="groupInviteId" :isReceive="true"/>
+              <base-group-invitation-card :key="item.groupInviteId" :link="item.inviteLink" :inviteId="item.groupInviteId" :isReceive="true" @acceptInvite="acceptInvitation"/>
             </template>
             <br />
           </template>
 
           <template v-if="sendInvites.length > 0">
             <v-list-item-title class="text-h5 font-weight-regular">
-              Receive Invites
+              Send Invites
             </v-list-item-title>
             <template v-for="item in sendInvites">
-              <base-group-invitation-card :key="item.groupInviteId" :link="item.inviteLink" :inviteId="groupInviteId" :isReceive="false"/>
+              <base-group-invitation-card :key="item.groupInviteId" :link="item.inviteLink" :inviteId="item.groupInviteId" :isReceive="false"/>
             </template>
           </template>
         </base-material-card>
@@ -74,8 +74,8 @@
 </template>
 
 <script>
-import FriendsInvite from "../../../../services/friendInvite";
-import AlertHandler from "../../../../utils/alertHandle";
+import FriendsInvite from "@/services/Invite";
+import AlertHandler from "@/utils/alertHandle";
 export default {
   data: () => ({
     friendInvites: [],
@@ -121,6 +121,9 @@ export default {
           AlertHandler.errorMessage(err.message);
         });
     },
+    acceptInvitation(invitationId) {
+      console.log(invitationId)
+    }
   },
 };
 </script>
