@@ -2,6 +2,7 @@
 
 let port = "dev"
 let baseURL = "http://localhost:8080/Money_Manager_Backend"
+let siteBaseUrl = "http://localhost:8081?"
 
 
 if(port === "dev"){
@@ -20,4 +21,5 @@ function checkUser() {
 export default {
     checkUser: checkUser,
     baseURL: baseURL,
+    siteBaseUrl: siteBaseUrl
 }
