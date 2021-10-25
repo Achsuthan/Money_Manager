@@ -12,7 +12,13 @@
               </v-list-item-content>
               <v-list-item-content class="text-right">
                 <v-list-item-title class="text-h5 font-weight-regular">
-                  <v-btn elevation="0" fab dark color="primary">
+                  <v-btn
+                    elevation="0"
+                    fab
+                    dark
+                    color="primary"
+                    to="/search_friends"
+                  >
                     <v-icon dark> mdi-plus </v-icon>
                   </v-btn>
                 </v-list-item-title>
@@ -25,6 +31,8 @@
               :link="invite.link"
               :inviteId="invite.inviteId"
               :isFriend="true"
+              :email="invite.email"
+              @deleteFriendsInvite="deleteFriendsInvite"
             />
           </template>
         </base-material-card>
@@ -38,13 +46,6 @@
                   Group Invitations
                 </v-list-item-title>
               </v-list-item-content>
-              <v-list-item-content class="text-right">
-                <v-list-item-title class="text-h5 font-weight-regular">
-                  <v-btn elevation="0" fab dark color="primary">
-                    <v-icon dark> mdi-plus </v-icon>
-                  </v-btn>
-                </v-list-item-title>
-              </v-list-item-content>
             </v-list-item>
           </template>
           <br />
@@ -54,7 +55,15 @@
             </v-list-item-title>
 
             <template v-for="item in rceiveInvites">
-              <base-group-invitation-card :key="item.groupInviteId" :link="item.inviteLink" :inviteId="item.groupInviteId" :isReceive="true" @acceptInvite="acceptInvitation"/>
+              <base-group-invitation-card
+                :key="item.groupInviteId"
+                :link="item.inviteLink"
+                :inviteId="item.groupInviteId"
+                :isReceive="true"
+                @deleteGroupInvitation="deleteGroupInvitation"
+                @acceptInvite="acceptInvitation"
+                :description="getDescription(item, true)"
+              />
             </template>
             <br />
           </template>
@@ -64,7 +73,14 @@
               Send Invites
             </v-list-item-title>
             <template v-for="item in sendInvites">
-              <base-group-invitation-card :key="item.groupInviteId" :link="item.inviteLink" :inviteId="item.groupInviteId" :isReceive="false"/>
+              <base-group-invitation-card
+                :key="item.groupInviteId"
+                :link="item.inviteLink"
+                :inviteId="item.groupInviteId"
+                :isReceive="false"
+                @deleteGroupInvitation="deleteGroupInvitation"
+                :description="getDescription(item, false)"
+              />
             </template>
           </template>
         </base-material-card>
@@ -97,8 +113,8 @@ export default {
             this.friendInvites = res.data.body.invites;
           }
         })
-        .catch((err) => {
-          AlertHandler.errorMessage(err.message);
+        .catch((res) => {
+          AlertHandler.errorMessage(res.message);
         });
     },
 
@@ -108,7 +124,7 @@ export default {
       };
       FriendsInvite.getAllGroupInvites(payload)
         .then((res) => {
-          console.log(res)
+          console.log(res);
           if (res.data.body.receiveRequest) {
             this.rceiveInvites = res.data.body.receiveRequest;
           }
@@ -121,9 +137,70 @@ export default {
           AlertHandler.errorMessage(err.message);
         });
     },
+    deleteFriendsInvite(inviteId) {
+      console.log(inviteId);
+      const payload = {
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+        inviteId: inviteId,
+      };
+      FriendsInvite.deleteFriendInviteId(payload)
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.getAllInvites();
+          }
+        })
+        .catch((res) => {
+          AlertHandler.errorMessage(res.message);
+        });
+    },
+    deleteGroupInvitation(invitationId) {
+      const payload = {
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+        groupInviteId: invitationId,
+      };
+      FriendsInvite.deleteGroupInviteId(payload)
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.getGroupInvites();
+          }
+        })
+        .catch((res) => {
+          AlertHandler.errorMessage(res.message);
+        });
+    },
     acceptInvitation(invitationId) {
-      console.log(invitationId)
-    }
+      const payload = {
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+        groupInviteId: invitationId,
+      };
+      FriendsInvite.acceptGroupInvite(payload)
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.getGroupInvites();
+          }
+        })
+        .catch((res) => {
+          AlertHandler.errorMessage(res.message);
+        });
+    },
+    getDescription(item, isRecive) {
+      if (isRecive) {
+        return (
+          item.sender.name +
+          " has request you to join to " +
+          item.groupName +
+          "group"
+        );
+      } else {
+        return (
+          "You requested " +
+          item.receiver.name +
+          " to join to " +
+          item.groupName +
+          "group"
+        );
+      }
+    },
   },
 };
 </script>

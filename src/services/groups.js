@@ -11,6 +11,20 @@ const getAllGroups = (payload) => {
       }
     });
 };
+
+const createGroup = (payload) => {
+  return instance.instance
+    .post("/create-group",  payload)
+    .then(function(response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
 export default {
   getAllGroups: getAllGroups,
+  createGroup: createGroup
 };

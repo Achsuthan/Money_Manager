@@ -2,30 +2,6 @@
   <v-container id="user-profile" fluid tag="section">
     <v-row justify="center">
       <v-col cols="12" md="6">
-        <v-card color="orange pa-4">
-          <v-list-item class="grow" two-line>
-            <v-list-item-content>
-              <v-list-item-title
-                class="text-h2 font-weight-regular white--text"
-              >
-                Total Balance
-              </v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-content class="text-right">
-              <v-list-item-title class="text-h5 font-weight-regular">
-                <v-list-item-title
-                  class="text-h1 font-weight-regular white--text"
-                >
-                  $290
-                </v-list-item-title>
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" md="6">
         <base-material-card color="orange">
           <template v-slot:heading>
             <v-list-item class="grow pa-0" two-line>

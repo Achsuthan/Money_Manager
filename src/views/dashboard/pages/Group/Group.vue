@@ -17,6 +17,7 @@
             <v-row justify="end">
               <v-btn
                 color="success"
+                to="/create-group"
               >
                 Create Group
               </v-btn>
@@ -36,22 +37,12 @@
                   >
                     <v-list-item-content>
                       <v-list-item-title
-                        class="text-h2 font-weight-regular white--text"
+                        class="text-h2 font-weight-regular white--text center"
                       >
-                        Total Balance
+                        Groups
                       </v-list-item-title>
                     </v-list-item-content>
-                    <v-list-item-content class="text-right">
-                      <v-list-item-title
-                        class="text-h5 font-weight-regular"
-                      >
-                        <v-list-item-title
-                          class="text-h1 font-weight-regular white--text"
-                        >
-                          $145
-                        </v-list-item-title>
-                      </v-list-item-title>
-                    </v-list-item-content>
+                    
                   </v-list-item>
                 </v-card>
               </v-col>
@@ -64,7 +55,7 @@
                 md="6"
               >
                 <template v-for="item in groups">
-                  <single-gorup-card :key="item.groupId" :groupName="item.groupName" :isOwner="item.isOwner"/>
+                  <single-gorup-card :key="item.groupId" :groupName="item.groupName" :isOwner="item.isOwner" :groupId="item.groupId"/>
                 </template>
               </v-col>
             </v-row>

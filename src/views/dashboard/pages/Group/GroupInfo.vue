@@ -85,7 +85,7 @@
                   fab
                   dark
                   color="primary"
-                  to="search_friends"
+                  to="/search_friends_group"
                 >
                   <v-icon dark>
                     mdi-plus

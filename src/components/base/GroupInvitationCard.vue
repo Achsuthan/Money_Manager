@@ -12,11 +12,16 @@
               {{siteBaseUrl + "groupInvite=" + link}}
             </a>
           </v-list-item-subtitle>
+
+          <v-list-item-subtitle class="text-h4 font-weight-regular text-wrap">
+            <br/>
+          {{description}}
+          </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-content class="text-right">
           <v-col>
-            <!-- <v-icon class="mr-0" color="red" v-on:click="deleteInvite()"> mdi-delete </v-icon> -->
-            <v-icon v-if="isReceive" class="ml-4" color="green" v-on:click="$emit('acceptInvite',inviteId)"> mdi-check </v-icon>
+            <v-icon class="mr-0" color="red" v-on:click="$emit('deleteGroupInvitation',inviteId)"> mdi-delete </v-icon>
+            <v-btn v-if="isReceive" class="ml-4" color="green" v-on:click="$emit('acceptInvite',inviteId)"> Accept Inviation </v-btn>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -30,7 +35,8 @@ export default {
   props: {
     link: String,
     inviteId: String,
-    isReceive: Boolean
+    isReceive: Boolean,
+    description: String
   },
   data: ({ 
     siteBaseUrl:"",

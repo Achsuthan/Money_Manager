@@ -15,24 +15,20 @@
               </v-col>
 
               <v-col cols="2" md="2" class="mr-2 ml-2" align="end">
-                <!-- <v-btn color="success" rounded class="mx-2" to="/add_expenses">
-                  Search
-                </v-btn> -->
                 <v-btn
                   elevation="0"
                   fab
                   dark
                   color="primary"
-                  to="search_friends"
                   v-on:click="searchFriends()"
                 >
                   <v-icon dark> mdi-account-search </v-icon>
                 </v-btn>
               </v-col>
             </v-row>
-            <v-card color="blue" v-if="users.length == 0 && isSeachStarted">
+            <v-card color="primary" style="width: 250px;" v-if="users.length == 0 && isSeachStarted">
               <v-card-text class="white--text" v-on:click="showInvite()">
-                Invite Friend
+                Click here to invite friend
               </v-card-text>
             </v-card>
             <template v-for="(item, index) in users">
@@ -41,6 +37,7 @@
                 :key="index + 1"
                 :name="item.name"
                 :email="item.email"
+                :isRequest="!isGroupSearch"
                 v-on:click="select(item)"
                 @sendRequest="sendRequest"
               />
@@ -53,7 +50,7 @@
           <base-material-card color="orange">
             <template v-slot:heading>
               <span class="text-h3 font-weight-bold">
-                {{ isGroupSearch ? "Group" : "Friend" }} Invite
+                Friend Invite
               </span>
             </template>
             <v-form ref="form">
@@ -61,12 +58,6 @@
                 label="Email"
                 v-model="email"
                 :rules="[emailRule.required, emailRule.validate]"
-              />
-              <v-text-field
-                label="Group Name"
-                v-model="groupName"
-                v-if="isGroupSearch"
-                :rules="[nameRule.required]"
               />
               <span class="font-weight-bold text-h4"
                 >This link will be expired after:
@@ -107,14 +98,10 @@ export default {
         required: (value) => !!value || "Please enter your email",
         validate: (v) => emailVlidation(v) || "Your email address is not valid",
       },
-      groupName: "",
-      nameRule: {
-        required: (value) => !!value || "Please enter group name",
-      },
     };
   },
   mounted() {
-    if (this.$route.query.type == "group") {
+    if (this.$route.meta.isGroup) {
       this.isGroupSearch = true;
     }
     var date = new Date();
@@ -124,31 +111,49 @@ export default {
   methods: {
     searchFriends() {
       if (this.searchKey) {
+        this.isInvite = false;
         this.isSeachStarted = true;
-        const payload = {
-          keyword: this.searchKey,
-          userId: JSON.parse(localStorage.getItem("user")).userId,
-          searchType: "3",
-        };
-        SearchService.searchPeople(payload)
-          .then((res) => {
-            if (res.data.body.users) {
-              this.users = res.data.body.users;
-            }
-          })
-          .catch((err) => {
-            console.log("error");
-          });
+        if (this.isGroupSearch) {
+           const payload = {
+            keyword: this.searchKey,
+            userId: JSON.parse(localStorage.getItem("user")).userId,
+            searchType: "1",
+          };
+          SearchService.searchPeople(payload)
+            .then((res) => {
+              if (res.data.body.friends) {
+                this.users = res.data.body.friends;
+              }
+            })
+            .catch((err) => {
+              console.log("error");
+            });
+        } else {
+          const payload = {
+            keyword: this.searchKey,
+            userId: JSON.parse(localStorage.getItem("user")).userId,
+            searchType: "3",
+          };
+          SearchService.searchPeople(payload)
+            .then((res) => {
+              if (res.data.body.users) {
+                this.users = res.data.body.users;
+              }
+            })
+            .catch((err) => {
+              console.log("error");
+            });
+        }
       }
     },
     showInvite() {
+      this.email = this.searchKey;
       this.isInvite = true;
     },
     clear() {
       this.$refs.form.reset();
     },
     createLink() {
-      console.log("create link");
       if (this.$refs.form.validate()) {
         const payload = {
           userId: JSON.parse(localStorage.getItem("user")).userId,
@@ -158,7 +163,7 @@ export default {
         FriendService.createInvite(payload)
           .then((res) => {
             if (res.data.code == 200) {
-              this.$router.push("/invites");
+              this.isGroupSearch ? this.$router.back() :this.$router.push("/invites");
             }
           })
           .catch((res) => {
@@ -175,7 +180,6 @@ export default {
             userId: JSON.parse(localStorage.getItem("user")).userId,
             friendId: singleUser.userId,
           };
-          console.log("payload", payload);
           FriendService.sendRequest(payload)
             .then((res) => {
               if (res.data.code == 200) {
@@ -186,6 +190,7 @@ export default {
               AlertHandler.errorMessage(res.message);
             });
         } else {
+          this.$router.back();
         }
       }
     },

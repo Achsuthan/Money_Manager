@@ -13,7 +13,7 @@
         <v-col cols="4" md="4">
           <v-list-item-content class="text-right">
             <v-btn class="mr-4" color="primary" v-on:click="sendRequest()"
-              >Add Friend</v-btn
+              >{{isRequest ? 'Add Friend' : 'Add to Group'}}</v-btn
             >
           </v-list-item-content>
         </v-col>
@@ -26,9 +26,9 @@
 export default {
   props: {
     index: Number,
-    isSelected: Boolean,
     name: String,
     email: String,
+    isRequest: Boolean
   },
   methods: {
     sendRequest() {

@@ -44,6 +44,7 @@
                   :name="item.name"
                   :email="item.email"
                   :isReceive="false"
+                  :isFriend="true"
                   :friendsId="item.friendsId"
                 />
               </template>
@@ -56,6 +57,8 @@
                   :name="item.name"
                   :email="item.email"
                   :isReceive="false"
+                  :isFriend="false"
+                  @deleteFriendRequest="deleteFriendRequest"
                   :friendsId="item.friendsId"
                 />
               </template>
@@ -67,6 +70,8 @@
                   :name="item.name"
                   :email="item.email"
                   :isReceive="true"
+                  :isFriend="false"
+                  @deleteFriendRequest="deleteFriendRequest"
                   @acceptRequest="acceptRequest"
                   :friendsId="item.friendsId"
                 />
@@ -114,8 +119,33 @@ export default {
           AlertHandler.errorMessage(err.message);
         });
     },
+    deleteFriendRequest(requestId){
+      const payload = {
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+        friendRequestId: requestId
+      }
+
+      FriendService.deleteFriendReqeust(payload)
+        .then((res) => {
+          this.getAllFriends()
+        })
+        .catch((res) => {
+          AlertHandler.errorMessage(err.message);
+        });
+    },
     acceptRequest(requestId) {
-      console.log(requestId);
+      const payload = {
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+        friendsRequestId: requestId,
+      }
+
+      FriendService.acceptFriendRequest(payload)
+        .then((res) => {
+          this.getAllFriends()
+        })
+        .catch((res) => {
+          AlertHandler.errorMessage(err.message);
+        });
     },
   },
 };

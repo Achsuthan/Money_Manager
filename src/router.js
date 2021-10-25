@@ -29,9 +29,18 @@ const router =  new Router({
             isAuth: true,
           }
         },
+
+        {
+          name: 'Create Group',
+          path: '/create-group',
+          component: () => import('@/views/dashboard/pages/Group/CreateGroup'),
+          meta:{
+            isAuth: true,
+          }
+        },
         {
           name: 'Group Info',
-          path: '/group_info',
+          path: '/group/:id',
           component: () => import('@/views/dashboard/pages/Group/GroupInfo'),
           meta:{
             isAuth: true,
@@ -67,6 +76,16 @@ const router =  new Router({
           component: () => import('@/views/dashboard/pages/Friends/SearchFriends'),
           meta:{
             isAuth: true,
+            isGroup: false
+          }
+        },
+        {
+          name: 'Search Friends',
+          path: '/search_friends_group',
+          component: () => import('@/views/dashboard/pages/Friends/SearchFriends'),
+          meta:{
+            isAuth: true,
+            isGroup: true
           }
         },
         {

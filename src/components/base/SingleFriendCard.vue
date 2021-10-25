@@ -25,12 +25,14 @@
             >
               mdi mdi-check
             </v-icon>
-            <!-- <v-icon
+            <v-icon
+            v-if="!isFriend"
               class="mr-0"
               color="red"
+              v-on:click="$emit('deleteFriendRequest', friendsId)"
             >
               mdi-delete
-            </v-icon> -->
+            </v-icon>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -45,7 +47,8 @@ export default {
     friendsId: String,
     name: String,
     email: String,
-    isReceive: Boolean
+    isReceive: Boolean,
+    isFriend: Boolean
   }
 }
 </script>

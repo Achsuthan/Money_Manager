@@ -12,10 +12,14 @@
               {{siteBaseUrl + "friendInvite=" + link}}
             </a>
           </v-list-item-subtitle>
+          <v-list-item-subtitle class="text-h4 font-weight-regular text-wrap">
+            <br/>
+            Request sent to : <span style="color: black;"> {{email}} </span>
+          </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-content class="text-right">
           <v-col>
-            <!-- <v-icon class="mr-0" color="red" v-on:click="deleteInvite()"> mdi-delete </v-icon> -->
+            <v-icon class="mr-0" color="red" v-on:click="$emit('deleteFriendsInvite',inviteId)"> mdi-delete </v-icon>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -28,18 +32,14 @@ import Config from '../../services/config'
 export default {
   props: {
     link: String,
-    inviteId: String
+    inviteId: String,
+    email: String
   },
   data: ({ 
     siteBaseUrl:""
   }),
   created(){
     this.siteBaseUrl = Config.siteBaseUrl
-  },
-  methods: {
-    deleteInvite(){
-      console.log("delte invitation")
-    }
   },
 };
 </script>
