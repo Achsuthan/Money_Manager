@@ -37,20 +37,39 @@
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="i in 3" :key="i" :value="'tab-' + i">
           <v-card flat class="mr-8 ml-8">
-            <template v-if="i == 1 && friends.length > 0" >
+            <template v-if="i == 1 && friends.length > 0">
               <template v-for="item in friends">
-                <base-single-friend-card :key="item.friendsId" :name="item.name" :email="item.email" :isReceive="false" :friendsId="item.friendsId" />
+                <base-single-friend-card
+                  :key="item.friendsId"
+                  :name="item.name"
+                  :email="item.email"
+                  :isReceive="false"
+                  :friendsId="item.friendsId"
+                />
               </template>
-              
             </template>
-            <template v-else-if="i == 2 && receiveRequest.length > 0" >
-              <template v-for="item in receiveRequest">
-                <base-single-friend-card :key="item.friendsId" :name="item.name" :email="item.email" :isReceive="true" @acceptRequest="acceptRequest" :friendsId="item.friendsId"/>
-              </template>
-            </template>
-            <template v-else-if="sentRequest.length > 0 && i == 3">
+
+            <template v-else-if="sentRequest.length > 0 && i == 2">
               <template v-for="item in sentRequest">
-                <base-single-friend-card :key="item.friendsId" :name="item.name" :email="item.email" :isReceive="false" :friendsId="item.friendsId"/>
+                <base-single-friend-card
+                  :key="item.friendsId"
+                  :name="item.name"
+                  :email="item.email"
+                  :isReceive="false"
+                  :friendsId="item.friendsId"
+                />
+              </template>
+            </template>
+            <template v-else-if="i == 3 && receiveRequest.length > 0">
+              <template v-for="item in receiveRequest">
+                <base-single-friend-card
+                  :key="item.friendsId"
+                  :name="item.name"
+                  :email="item.email"
+                  :isReceive="true"
+                  @acceptRequest="acceptRequest"
+                  :friendsId="item.friendsId"
+                />
               </template>
             </template>
           </v-card>
@@ -65,39 +84,39 @@ import FriendService from "../../../../services/friends";
 export default {
   data: () => ({
     tab: null,
-    friends:[],
-    sentRequest:[],
-    receiveRequest:[]
+    friends: [],
+    sentRequest: [],
+    receiveRequest: [],
   }),
-  created(){
+  created() {
     this.getAllFriends();
   },
-  methods:{
-    getAllFriends(){
+  methods: {
+    getAllFriends() {
       const payload = {
-        userId: JSON.parse(localStorage.getItem("user")).userId
-      }
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+      };
       FriendService.getAllFriends(payload)
-      .then(res =>{
-        if(res.data.body.friends){
-          this.friends = res.data.body.friends;
-        }
+        .then((res) => {
+          if (res.data.body.friends) {
+            this.friends = res.data.body.friends;
+          }
 
-        if(res.data.body.sentRequest){
-          this.sentRequest = res.data.body.sentRequest
-        }
+          if (res.data.body.sentRequest) {
+            this.sentRequest = res.data.body.sentRequest;
+          }
 
-        if(res.data.body.receiveRequest){
-          this.receiveRequest = res.data.body.receiveRequest
-        }
-      })
-      .catch(res => {
-        AlertHandler.errorMessage(err.message);
-      })
+          if (res.data.body.receiveRequest) {
+            this.receiveRequest = res.data.body.receiveRequest;
+          }
+        })
+        .catch((res) => {
+          AlertHandler.errorMessage(err.message);
+        });
     },
-    acceptRequest(requestId){
-      console.log(requestId)
-    }
-  }
+    acceptRequest(requestId) {
+      console.log(requestId);
+    },
+  },
 };
 </script>

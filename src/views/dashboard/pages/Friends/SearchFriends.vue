@@ -1,93 +1,194 @@
 <template>
-  <v-container
-    id="user-profile"
-    fluid
-    tag="section"
-  >
+  <v-container id="user-profile" fluid tag="section">
     <v-row justify="center">
-      <v-col
-        cols="12"
-        md="6"
-      >
+      <v-col cols="12" md="6">
         <v-card>
           <v-card-text>
-            <v-text-field
-              append-icon="mdi-account-search"
-              name="input-10-1"
-              label="Person Name"
-            />
-            <v-card color="blue">
-              <v-card-text class="white--text">
+            <v-row align="center">
+              <v-col cols="8" md="8">
+                <v-text-field
+                  append-icon="mdi-account-search"
+                  name="input-10-1"
+                  label="Person Name"
+                  v-model="searchKey"
+                />
+              </v-col>
+
+              <v-col cols="2" md="2" class="mr-2 ml-2" align="end">
+                <!-- <v-btn color="success" rounded class="mx-2" to="/add_expenses">
+                  Search
+                </v-btn> -->
+                <v-btn
+                  elevation="0"
+                  fab
+                  dark
+                  color="primary"
+                  to="search_friends"
+                  v-on:click="searchFriends()"
+                >
+                  <v-icon dark> mdi-account-search </v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-card color="blue" v-if="users.length == 0 && isSeachStarted">
+              <v-card-text class="white--text" v-on:click="showInvite()">
                 Invite Friend
               </v-card-text>
             </v-card>
-            <base-single-person-card />
-            <base-single-person-card />
+            <template v-for="(item, index) in users">
+              <base-single-friend-search-card
+                :index="index"
+                :key="index + 1"
+                :name="item.name"
+                :email="item.email"
+                v-on:click="select(item)"
+                @sendRequest="sendRequest"
+              />
+            </template>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <base-material-card
-          color="orange"
-        >
-          <template v-slot:heading>
-            <span
-              class="text-h3 font-weight-bold"
-            >
-              Invite
-            </span>
-          </template>
-          <form>
-            <v-text-field
-              label="Email"
-              required
-            />
-            <v-text-field
-              label="Group Name"
-              disabled="true"
-            />
-            <span
-              class="font-weight-bold text-h4"
-            >This link will be expired after: </span>
-            <span>
-              28th Sept 2021
-            </span>
-            <v-btn
-              class="blue--text ma-0 pa-0"
-              color="transparent"
-              elevation="0"
-            >
-              Select another Expiry date
-            </v-btn>
-            <v-row
-              justify="start"
-              class="pl-4"
-            >
-              <v-date-picker v-model="picker" />
-            </v-row>
-            <v-btn
-              class="mr-4"
-              color="primary"
-            >
-              submit
-            </v-btn>
-            <v-btn
-              color="red"
-            >
-              clear
-            </v-btn>
-          </form>
-        </base-material-card>
-      </v-col>
+      <template v-if="isInvite">
+        <v-col cols="12" md="6">
+          <base-material-card color="orange">
+            <template v-slot:heading>
+              <span class="text-h3 font-weight-bold">
+                {{ isGroupSearch ? "Group" : "Friend" }} Invite
+              </span>
+            </template>
+            <v-form ref="form">
+              <v-text-field
+                label="Email"
+                v-model="email"
+                :rules="[emailRule.required, emailRule.validate]"
+              />
+              <v-text-field
+                label="Group Name"
+                v-model="groupName"
+                v-if="isGroupSearch"
+                :rules="[nameRule.required]"
+              />
+              <span class="font-weight-bold text-h4"
+                >This link will be expired after:
+              </span>
+              <span> {{ expiryDate }} </span>
+              <br />
+              <br />
+              <v-btn color="red" v-on:click="clear()"> Clear </v-btn>
+              <v-btn class="mr-4" color="primary" v-on:click="createLink()">
+                Submit
+              </v-btn>
+            </v-form>
+          </base-material-card>
+        </v-col>
+      </template>
     </v-row>
   </v-container>
 </template>
 
 <script>
-  export default {
-    //
-  }
+import { emailVlidation } from "@/utils/validation";
+import AlertHandler from "@/utils/alertHandle";
+import moment from "moment-timezone";
+import SearchService from "@/services/search";
+import FriendService from "@/services/friends";
+import alertHandle from "../../../../utils/alertHandle";
+export default {
+  data() {
+    return {
+      isGroupSearch: false,
+      isInvite: false,
+      isSeachStarted: false,
+      searchKey: "",
+      users: [],
+      email: "",
+      expiryDate: "",
+      emailRule: {
+        required: (value) => !!value || "Please enter your email",
+        validate: (v) => emailVlidation(v) || "Your email address is not valid",
+      },
+      groupName: "",
+      nameRule: {
+        required: (value) => !!value || "Please enter group name",
+      },
+    };
+  },
+  mounted() {
+    if (this.$route.query.type == "group") {
+      this.isGroupSearch = true;
+    }
+    var date = new Date();
+    var formattedDate = moment(date).format("YYYY-MM-DD");
+    this.expiryDate = moment(formattedDate).format("LL");
+  },
+  methods: {
+    searchFriends() {
+      if (this.searchKey) {
+        this.isSeachStarted = true;
+        const payload = {
+          keyword: this.searchKey,
+          userId: JSON.parse(localStorage.getItem("user")).userId,
+          searchType: "3",
+        };
+        SearchService.searchPeople(payload)
+          .then((res) => {
+            if (res.data.body.users) {
+              this.users = res.data.body.users;
+            }
+          })
+          .catch((err) => {
+            console.log("error");
+          });
+      }
+    },
+    showInvite() {
+      this.isInvite = true;
+    },
+    clear() {
+      this.$refs.form.reset();
+    },
+    createLink() {
+      console.log("create link");
+      if (this.$refs.form.validate()) {
+        const payload = {
+          userId: JSON.parse(localStorage.getItem("user")).userId,
+          email: this.email,
+        };
+
+        FriendService.createInvite(payload)
+          .then((res) => {
+            if (res.data.code == 200) {
+              this.$router.push("/invites");
+            }
+          })
+          .catch((res) => {
+            AlertHandler.errorMessage(res.message);
+          });
+      }
+    },
+    sendRequest(index) {
+      const singleUser = this.users[index];
+      if (singleUser) {
+        console.log(singleUser);
+        if (!this.isGroupSearch) {
+          const payload = {
+            userId: JSON.parse(localStorage.getItem("user")).userId,
+            friendId: singleUser.userId,
+          };
+          console.log("payload", payload);
+          FriendService.sendRequest(payload)
+            .then((res) => {
+              if (res.data.code == 200) {
+                this.$router.push("/friends");
+              }
+            })
+            .catch((res) => {
+              AlertHandler.errorMessage(res.message);
+            });
+        } else {
+        }
+      }
+    },
+  },
+};
 </script>

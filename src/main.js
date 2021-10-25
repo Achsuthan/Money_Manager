@@ -20,10 +20,12 @@ import './plugins/chartist'
 import './plugins/vee-validate'
 import vuetify from './plugins/vuetify'
 import Notifications from 'vue-notification'
+import moment from 'moment-timezone'
 
 Vue.config.productionTip = false
 
 Vue.use(Notifications)
+Vue.use(moment)
 
 new Vue({
   router,

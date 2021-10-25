@@ -78,9 +78,9 @@
   </v-app>
 </template>
 <script>
-import { emailVlidation } from "../../utils/validation";
-import LoginService from "../../services/login";
-import AlertHandler from "../../utils/alertHandle";
+import { emailVlidation } from "@/utils/validation";
+import LoginService from "@/services/login";
+import AlertHandler from "@/utils/alertHandle";
 export default {
   name: "DashboardIndex",
   data: () => ({
