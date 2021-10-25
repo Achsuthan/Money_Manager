@@ -40,12 +40,20 @@
       transition="scale-transition"
     >
       <template v-slot:activator="{ attrs, on }">
-        <v-btn
+        <!-- <v-btn
           class="ml-0"
           min-width="0"
           text
           v-bind="attrs"
           to="/notifications"
+          v-on="on"
+        > -->
+
+        <v-btn
+          class="ml-0"
+          min-width="0"
+          text
+          v-bind="attrs"
           v-on="on"
         >
           <v-icon>mdi-bell</v-icon>

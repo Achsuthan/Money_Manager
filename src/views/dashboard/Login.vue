@@ -1,83 +1,68 @@
 <template>
-  <v-app
-    :style="primary"
-  >
-    <v-dialog
-      v-model="dialog"
-      persistent
-      max-width="600px"
-      min-width="360px"
-    >
-      <v-container
-        id="user-profile"
-        fluid
-        tag="section"
-      >
+  <v-app :style="primary">
+    <v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
+      <v-container id="user-profile" fluid tag="section">
         <base-material-card>
           <template v-slot:heading>
             <div class="text-h2 font-weight-light">
-              Login
+              {{ isLogin ? "LOGIN" : "REGISTER" }}
             </div>
           </template>
 
-          <v-form>
+          <v-form ref="form" lazy-validation>
             <v-container class="py-0">
               <v-row>
                 <v-col cols="12">
                   <v-text-field
                     label="Email"
+                    :rules="[emailRule.required, emailRule.validate]"
+                    v-model="email"
                     class="purple-input"
                   />
                 </v-col>
-                <v-col cols="12">
+                <v-col cols="12" v-if="!isLogin">
                   <v-text-field
                     label="Name"
+                    v-model="name"
+                    :rules="[nameRule.required, nameRule.min]"
                     class="purple-input"
                   />
                 </v-col>
 
                 <v-col cols="12">
                   <v-text-field
+                    type="password"
+                    v-model="password"
+                    :rules="[passwordRule.required, passwordRule.min]"
                     label="Password"
                     class="purple-input"
                   />
                 </v-col>
 
-                <v-list-item
-                  class="grow ma-0 ma-0"
-                  two-line
-                >
+                <v-list-item class="grow ma-0 ma-0" two-line>
                   <v-list-item-content>
-                    <v-list-item-title
-                      class="text-h5 font-weight-regular"
-                    >
+                    <v-list-item-title class="text-h5 font-weight-regular">
                       <v-btn
                         class="blue--text ma-0 pa-0"
                         color="transparent"
                         elevation="0"
+                        v-on:click="switchLoginRegister"
                       >
-                        Register
+                        {{ isLogin ? "Register" : "Login" }}
                       </v-btn>
                     </v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-content class="text-right">
-                    <v-list-item-title
-                      class="text-h5 font-weight-regular"
-                    >
-                      <v-col
-                        cols="12"
-                        class="text-right"
-                      >
+                    <v-list-item-title class="text-h5 font-weight-regular">
+                      <v-col cols="12" class="text-right">
                         <v-btn
                           color="success"
                           class="mr-4"
+                          v-on:click="isLogin ? login() : register()"
                         >
-                          Login
+                          {{ isLogin ? "Login" : "Register" }}
                         </v-btn>
-                        <v-btn
-                          color="red"
-                          class="mr-0"
-                        >
+                        <v-btn color="red" class="mr-0" v-on:click="reset">
                           Clear
                         </v-btn>
                       </v-col>
@@ -93,54 +78,72 @@
   </v-app>
 </template>
 <script>
-
-  export default {
-    name: 'DashboardIndex',
-    computed: {
-      passwordMatch () {
-        return () => this.password === this.verify || 'Password must match'
-      },
+import { emailVlidation } from "../../utils/validation";
+import LoginService from "../../services/login";
+import AlertHandler from "../../utils/alertHandle";
+export default {
+  name: "DashboardIndex",
+  data: () => ({
+    dialog: true,
+    isLogin: true,
+    name: "",
+    nameRule: {
+      required: (value) => !!value || "Please enter your name.",
+      min: (v) => (v != null && v.length) >= 8 || "Min 8 characters",
     },
-    methods: {
-      validate () {
-        if (this.$refs.loginForm.validate()) {
-        // submit form to server/API here...
-        }
-      },
-      reset () {
-        this.$refs.form.reset()
-      },
-      resetValidation () {
-        this.$refs.form.resetValidation()
-      },
+    password: "",
+    passwordRule: {
+      required: (value) => !!value || "Please enter your password",
+      min: (v) => (v != null && v.length >= 8) || "Min 8 charecters required",
     },
-    data: () => ({
-      dialog: true,
-      ab: 0,
-      valid: true,
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      verify: '',
-      loginPassword: '',
-      loginEmail: '',
-      loginEmailRules: [
-        v => !!v || 'Required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
-      emailRules: [
-        v => !!v || 'Required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
-
-      show1: false,
-      rules: {
-        required: value => !!value || 'Required.',
-        min: v => (v && v.length >= 8) || 'Min 8 characters',
-      },
-    }),
-  }
+    email: "",
+    emailRule: {
+      required: (value) => !!value || "Please enter your email",
+      validate: (v) => emailVlidation(v) || "Your email address is not valid",
+    },
+  }),
+  methods: {
+    switchLoginRegister() {
+      this.$refs.form.reset();
+      this.isLogin = !this.isLogin;
+    },
+    reset() {
+      this.$refs.form.reset();
+    },
+    login() {
+      if (this.$refs.form.validate()) {
+        const payload = {
+          email: this.email,
+          password: this.password,
+        };
+        LoginService.login(payload)
+          .then((res) => {
+            localStorage.setItem("user", JSON.stringify(res.data.body));
+          })
+          .catch((err) => {
+            AlertHandler.errorMessage(err.message);
+          });
+      }
+    },
+    register() {
+      if (this.$refs.form.validate()) {
+        const payload = {
+          email: this.email,
+          password: this.password,
+          name: this.name,
+        };
+        LoginService.register(payload)
+          .then((res) => {
+            this.$refs.form.reset();
+            this.isLogin = true;
+          })
+          .catch((err) => {
+            AlertHandler.errorMessage(err.message);
+          });
+      }
+    },
+  },
+};
 </script>
 
 <style lang="sass">

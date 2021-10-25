@@ -107,11 +107,6 @@
           title: 'Invites',
           to: '/invites',
         },
-        {
-          title: 'Notifications',
-          icon: 'mdi-bell',
-          to: '/notifications',
-        },
       ],
     }),
 
