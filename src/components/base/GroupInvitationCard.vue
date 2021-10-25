@@ -9,13 +9,14 @@
               target="_blank"
               class="green--text"
             >
-              {{siteBaseUrl + "friendInvite=" + link}}
+              {{siteBaseUrl + "groupInvite=" + link}}
             </a>
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-content class="text-right">
           <v-col>
             <v-icon class="mr-0" color="red" v-on:click="deleteInvite()"> mdi-delete </v-icon>
+            <v-icon v-if="isReceive" class="ml-4" color="green" v-on:click="acceptInvitation()"> mdi-check </v-icon>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -28,17 +29,21 @@ import Config from '../../services/config'
 export default {
   props: {
     link: String,
-    inviteId: String
+    inviteId: String,
+    isReceive: Boolean
   },
   data: ({ 
-    siteBaseUrl:""
+    siteBaseUrl:"",
   }),
   created(){
     this.siteBaseUrl = Config.siteBaseUrl
   },
   methods: {
     deleteInvite(){
-      console.log("delte invitation")
+      console.log("delete invitation")
+    },
+    acceptInvitation(){
+      console.log("accept invitation")
     }
   },
 };
