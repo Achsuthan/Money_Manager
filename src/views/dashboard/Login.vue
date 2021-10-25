@@ -119,6 +119,7 @@ export default {
         LoginService.login(payload)
           .then((res) => {
             localStorage.setItem("user", JSON.stringify(res.data.body));
+            this.$router.push('/');
           })
           .catch((err) => {
             AlertHandler.errorMessage(err.message);
@@ -134,6 +135,7 @@ export default {
         };
         LoginService.register(payload)
           .then((res) => {
+            AlertHandler.successMessage("You have registered successfully, please proceed to login")
             this.$refs.form.reset();
             this.isLogin = true;
           })
