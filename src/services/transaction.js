@@ -2,7 +2,20 @@ import instance from "@/services/instance.js";
 const getTransactions = (payload) => {
   return instance.instance
     .post("/getTransactions", payload)
-    .then(function(response) {
+    .then(function (response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
+
+const getFriendsTransactionbyUserId = (payload) => {
+  return instance.instance
+    .get(`/GetUserByTransacitonFriend?userId=${payload.userId}&transactionId=${payload.transactionId}`)
+    .then(function (response) {
       return response;
     })
     .catch((error) => {
@@ -14,4 +27,5 @@ const getTransactions = (payload) => {
 
 export default {
   getTransactions: getTransactions,
+  getFriendsTransactionbyUserId: getFriendsTransactionbyUserId
 };

@@ -40,16 +40,21 @@
               </v-col>
             </v-row>
           </v-col>
-          
           <template v-for="item in friendsTransactions">
             <base-material-stats-card
               :color="item.category.color"
               :icon="item.category.imageName"
               :title="item.transactionName"
-              :value="'$' + item.amount"
+              :value="item.amount"
               :date="getDate(item.date)"
               :key="item.transactionId"
+              :friends="item.friends"
+              :isOwn="item.isOwn"
+              :isTransactions="true"
+              :transactionId="item.transactionId"
             />
+            <!-- {{String(item.isOwn)}}
+            {{item.friends}} -->
           </template>
         </base-material-card>
       </v-col>
@@ -90,9 +95,12 @@
               :color="item.category.color"
               :icon="item.category.imageName"
               :title="item.transactionName"
-              :value="'$' + item.amount"
+              :value="item.amount"
               :date="getDate(item.date)"
               :key="item.transactionId"
+              :isTransactions="false"
+              :transactionId="item.transactionId"
+
             />
           </template>
         </base-material-card>
@@ -103,11 +111,11 @@
 
 <script>
 import TransactionService from "@/services/transaction";
-import CommonUtil from '@/utils/common'
+import CommonUtil from "@/utils/common";
 export default {
   data: () => ({
     ownTransacitons: [],
-    friendsTransactions:[],
+    friendsTransactions: [],
   }),
   created() {
     this.getOwnTransacitons();
@@ -146,11 +154,9 @@ export default {
           console.log(err);
         });
     },
-
-    getDate(dateString){
+    getDate(dateString) {
       return CommonUtil.getDate(dateString);
-    }
-    
+    },
   },
 };
 </script>
