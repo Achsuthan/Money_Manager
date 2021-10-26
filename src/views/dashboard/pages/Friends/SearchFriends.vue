@@ -26,7 +26,11 @@
                 </v-btn>
               </v-col>
             </v-row>
-            <v-card color="primary" style="width: 250px;" v-if="users.length == 0 && isSeachStarted">
+            <v-card
+              color="primary"
+              style="width: 250px"
+              v-if="users.length == 0 && isSeachStarted"
+            >
               <v-card-text class="white--text" v-on:click="showInvite()">
                 Click here to invite friend
               </v-card-text>
@@ -49,9 +53,7 @@
         <v-col cols="12" md="6">
           <base-material-card color="orange">
             <template v-slot:heading>
-              <span class="text-h3 font-weight-bold">
-                Friend Invite
-              </span>
+              <span class="text-h3 font-weight-bold"> Friend Invite </span>
             </template>
             <v-form ref="form">
               <v-text-field
@@ -83,7 +85,9 @@ import AlertHandler from "@/utils/alertHandle";
 import moment from "moment-timezone";
 import SearchService from "@/services/search";
 import FriendService from "@/services/friends";
+import InivteService from "@/services/Invite";
 import alertHandle from "../../../../utils/alertHandle";
+
 export default {
   data() {
     return {
@@ -94,6 +98,7 @@ export default {
       users: [],
       email: "",
       expiryDate: "",
+      groupId: "",
       emailRule: {
         required: (value) => !!value || "Please enter your email",
         validate: (v) => emailVlidation(v) || "Your email address is not valid",
@@ -101,6 +106,7 @@ export default {
     };
   },
   mounted() {
+    this.groupId = this.$route.params.id;
     if (this.$route.meta.isGroup) {
       this.isGroupSearch = true;
     }
@@ -114,7 +120,7 @@ export default {
         this.isInvite = false;
         this.isSeachStarted = true;
         if (this.isGroupSearch) {
-           const payload = {
+          const payload = {
             keyword: this.searchKey,
             userId: JSON.parse(localStorage.getItem("user")).userId,
             searchType: "1",
@@ -163,7 +169,9 @@ export default {
         FriendService.createInvite(payload)
           .then((res) => {
             if (res.data.code == 200) {
-              this.isGroupSearch ? this.$router.back() :this.$router.push("/invites");
+              this.isGroupSearch
+                ? this.$router.back()
+                : this.$router.push("/invites");
             }
           })
           .catch((res) => {
@@ -190,7 +198,22 @@ export default {
               AlertHandler.errorMessage(res.message);
             });
         } else {
-          this.$router.back();
+          const payload = {
+            userId: JSON.parse(localStorage.getItem("user")).userId,
+            reciverId: singleUser.userId,
+            accessLevel: "2",
+            groupId: this.groupId,
+          };
+          console.log(payload)
+          InivteService.sendGroupInvite(payload)
+          .then(res =>{
+            if(res.data.code == 200){
+              this.$router.back()
+            }
+          })
+          .catch(res=>{
+            AlertHandler.errorMessage(res.message)
+          })
         }
       }
     },
