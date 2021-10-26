@@ -24,7 +24,35 @@ const createGroup = (payload) => {
       }
     });
 };
+
+const getUsers = (payload) => {
+  return instance.instance
+    .get("/GetUsersFromGroup?userId=" + payload.userId + "&groupId="+payload.groupId)
+    .then(function(response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
+
+const getInvite = (payload) => {
+  return instance.instance
+    .get("/GetGroupInviteLinkByGroupId?userId=" + payload.userId + "&groupId="+payload.groupId)
+    .then(function(response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
 export default {
   getAllGroups: getAllGroups,
-  createGroup: createGroup
+  createGroup: createGroup,
+  getUsers: getUsers,
+  getInvite: getInvite
 };

@@ -32,6 +32,7 @@
               :inviteId="invite.inviteId"
               :isFriend="true"
               :email="invite.email"
+              :isDelete="true"
               @deleteFriendsInvite="deleteFriendsInvite"
             />
           </template>

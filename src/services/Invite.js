@@ -64,10 +64,24 @@ const acceptGroupInvite = (payload) => {
     });
 };
 
+const sendGroupInvite = (payload) => {
+  return instance.instance
+    .post("group-invite", payload)
+    .then(function(response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
+
 export default {
   getAllInvites: getAllInvites,
   getAllGroupInvites: getAllGroupInvites,
   deleteFriendInviteId: deleteFriendInviteId,
   deleteGroupInviteId: deleteGroupInviteId,
-  acceptGroupInvite: acceptGroupInvite
+  acceptGroupInvite: acceptGroupInvite,
+  sendGroupInvite: sendGroupInvite,
 };

@@ -18,7 +18,7 @@
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-content class="text-right">
-          <v-col>
+          <v-col v-if="isDelete">
             <v-icon class="mr-0" color="red" v-on:click="$emit('deleteFriendsInvite',inviteId)"> mdi-delete </v-icon>
           </v-col>
         </v-list-item-content>
@@ -33,7 +33,8 @@ export default {
   props: {
     link: String,
     inviteId: String,
-    email: String
+    email: String,
+    isDelete: Boolean
   },
   data: ({ 
     siteBaseUrl:""
