@@ -4,7 +4,7 @@
       <v-col cols="12" md="8">
         <base-material-card color="orange">
           <template v-slot:heading>
-            <div class="text-h3 font-weight-bold">{{groupName}}</div>
+            <div class="text-h3 font-weight-bold">{{ groupName }}</div>
 
             <div class="text-subtitle-1 font-weight-light">
               Senthuran owes you $13
@@ -31,9 +31,15 @@
               :color="item.category.categoryColor"
               :icon="item.category.imageName"
               :title="item.transactionName"
-              :value="'$' +item.amount"
+              :value="item.amount"
               :sub-text="item.transactionDescription"
               :date="getDate(item.date)"
+              :friends="item.friends"
+              :isOwn="item.isOwn"
+              :isTransactions="true"
+              :transactionId="item.transactionId"
+              :groupId="groupId"
+              type="group"
             />
           </template>
         </base-material-card>
@@ -54,7 +60,7 @@
                   fab
                   dark
                   color="primary"
-                  :to="'/search_friends_group/'+ this.groupId"
+                  :to="'/search_friends_group/' + this.groupId"
                 >
                   <v-icon dark> mdi-plus </v-icon>
                 </v-btn>
@@ -93,7 +99,7 @@
 <script>
 import TransactionService from "@/services/transaction";
 import GroupService from "@/services/groups";
-import CommonUtil from '@/utils/common'
+import CommonUtil from "@/utils/common";
 export default {
   data: () => ({
     groupTransactions: [],
@@ -109,8 +115,7 @@ export default {
     this.getInviteLinks();
   },
   methods: {
-
-    getDate(dateString){
+    getDate(dateString) {
       return CommonUtil.getDate(dateString);
     },
     getTransacitons() {
@@ -118,7 +123,7 @@ export default {
         const payload = {
           userId: JSON.parse(localStorage.getItem("user")).userId,
           transactionTo: "group",
-          groupId: this.groupId
+          groupId: this.groupId,
         };
         TransactionService.getTransactions(payload)
           .then((res) => {
@@ -127,8 +132,8 @@ export default {
               this.groupTransactions = res.data.body.transactions;
             }
 
-            if(res.data.body.groupName){
-              this.groupName = res.data.body.groupName
+            if (res.data.body.groupName) {
+              this.groupName = res.data.body.groupName;
             }
           })
           .catch((err) => {

@@ -44,17 +44,17 @@
           <p v-if="isOwn">
             You Spent
             <v-chip class="p-3" v-for="(friend, index) in friends" :key="index">
-              {{ friend.amount }} to {{ friend.name }}</v-chip
+             $ {{ friend.amount }} to {{ friend.name }}</v-chip
             >
           </p>
           <p v-else>
-            {{ friends[0].name }} Spent
+            {{ friends && friends.length > 0 && friends[0].name }} Spent
             <v-chip
               class="p-3"
               v-for="(friend, index) in transactionFriends"
               :key="index"
             >
-              {{ friend.amount }} to {{ friend.userName }}</v-chip
+              $ {{ friend.amount }} to {{ friend.userName }}</v-chip
             >
           </p>
         </div>
@@ -126,6 +126,14 @@ export default {
       type: String,
       default: undefined,
     },
+    type: {
+      type: String,
+      default: "friend",
+    },
+    groupId: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -136,14 +144,19 @@ export default {
   methods: {
     async OnClickFn() {
       let show = !this.show;
-
       this.show = show;
-      // alert("Sen2")
       if (!this.isOwn && show && this.transactionFriends.length == 0) {
-        let { data } = await TransactionService.getFriendsTransactionbyUserId({
+        let payload = {
           userId: JSON.parse(localStorage.getItem("user")).userId,
           transactionId: this.transactionId,
-        });
+        };
+        if (this.type != "friend") {
+          payload.groupId = this.groupId;
+        }
+        let { data } = await TransactionService.getFriendsTransaction(
+          this.type,
+          payload
+        );
         this.transactionFriends = data.body.users;
       }
     },
