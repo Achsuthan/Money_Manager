@@ -21,10 +21,14 @@ import './plugins/vee-validate'
 import vuetify from './plugins/vuetify'
 import Notifications from 'vue-notification'
 import moment from 'moment-timezone'
+import VueSocialSharing from 'vue-social-sharing'
+
+
 
 Vue.config.productionTip = false
 
 Vue.use(Notifications)
+Vue.use(VueSocialSharing);
 Vue.use(moment)
 
 new Vue({
