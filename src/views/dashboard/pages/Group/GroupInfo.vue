@@ -38,9 +38,9 @@
           <v-col>
             <v-row>
               <v-col>
-                <v-btn color="success" rounded class="mr-0" to="/add_expenses">
+                <!-- <v-btn color="success" rounded class="mr-0" to="/add_expenses">
                   Settle up
-                </v-btn>
+                </v-btn> -->
               </v-col>
               <v-col class="text-right">
                 <v-btn color="success" rounded class="mx-2" to="/add_expenses">
