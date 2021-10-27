@@ -12,15 +12,23 @@ const router =  new Router({
       component: () => import('@/views/dashboard/Index'),
       children: [
         // Dashboard
+        // {
+        //   name: 'Dashboard',
+        //   path: '',
+        //   component: () => import('@/views/dashboard/Dashboard'),
+        //   meta:{
+        //     isAuth: true,
+        //   }
+        // },
+        // Pages
         {
-          name: 'Dashboard',
+          name: 'Group_1',
           path: '',
-          component: () => import('@/views/dashboard/Dashboard'),
+          component: () => import('@/views/dashboard/pages/Group/Group'),
           meta:{
             isAuth: true,
           }
         },
-        // Pages
         {
           name: 'Group',
           path: '/group',

@@ -85,7 +85,6 @@ import AlertService from '../../../../utils/alertHandle'
         }
         GroupService.getAllGroups(payload)
         .then(res =>{
-          console.log(res);
           if(res.data.body.group){
             this.groups = res.data.body.group;
           }

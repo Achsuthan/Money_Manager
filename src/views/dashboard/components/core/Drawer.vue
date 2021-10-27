@@ -82,11 +82,11 @@
 
     data: () => ({
       items: [
-        {
-          icon: 'mdi-view-dashboard',
-          title: 'Dashboard',
-          to: '/',
-        },
+        // {
+        //   icon: 'mdi-view-dashboard',
+        //   title: 'Dashboard',
+        //   to: '/',
+        // },
         {
           icon: 'mdi-account-group',
           title: 'Group',

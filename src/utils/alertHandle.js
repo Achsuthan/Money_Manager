@@ -3,7 +3,6 @@ import Vue from 'vue'
 export default {
 
     errorMessage(details) {
-        console.log("Error message")
         Vue.notify({
             group: "foo",
             type:'error',

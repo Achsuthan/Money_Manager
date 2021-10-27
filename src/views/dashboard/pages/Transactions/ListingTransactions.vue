@@ -157,7 +157,6 @@ export default {
       };
       TransactionService.getTransactions(payload)
         .then((res) => {
-          console.log(res);
           if (res.data.body.transactions) {
             this.ownTransacitons = res.data.body.transactions;
           }
@@ -171,7 +170,6 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
         });
     },
     getFriendsTransacitons() {
@@ -192,7 +190,6 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
         });
     },
     getDate(dateString) {

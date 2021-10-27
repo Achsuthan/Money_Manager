@@ -155,7 +155,6 @@ export default {
         };
         TransactionService.getTransactions(payload)
           .then((res) => {
-            console.log(res);
             if (res.data.body.transactions) {
               this.groupTransactions = res.data.body.transactions;
             }
@@ -173,7 +172,6 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
           });
       }
     },
@@ -191,7 +189,6 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
           });
       }
     },
@@ -208,7 +205,6 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
           });
       }
     },
