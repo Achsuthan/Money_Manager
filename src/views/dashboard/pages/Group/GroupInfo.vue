@@ -4,19 +4,43 @@
       <v-col cols="12" md="8">
         <base-material-card color="orange">
           <template v-slot:heading>
-            <div class="text-h3 font-weight-bold">{{ groupName }}</div>
-
-            <div class="text-subtitle-1 font-weight-light">
-              Senthuran owes you $13
-            </div>
+            <v-list-item class="grow pa-0" three-line>
+              <v-list-item-content>
+                <v-list-item-title class="text-h5 font-weight-regular text-wrap">
+                  {{groupName}} Transactions
+                </v-list-item-title>
+                <v-list-item-subtitle class="font-weight-bold">
+                </v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-content class="text-right">
+                <v-list-item-title class="text-h5 font-weight-regular">
+                  <v-list-item-title class="text-h2 font-weight-regular ">
+                    $ {{youReceive.toFixed(2)}}
+                    <v-list-item-subtitle class="font-weight-bold">
+                      Received
+                    </v-list-item-subtitle>
+                  </v-list-item-title>
+                </v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-content class="text-right">
+                <v-list-item-title class="text-h4 font-weight-regular">
+                  <v-list-item-title class="text-h2 font-weight-regular">
+                    $ {{youSpent.toFixed(2)}}
+                    <v-list-item-subtitle class="font-weight-bold">
+                      Transfered
+                    </v-list-item-subtitle>
+                  </v-list-item-title>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </template>
 
           <v-col>
             <v-row>
               <v-col>
-                <v-btn color="success" rounded class="mr-0" to="/add_expenses">
+                <!-- <v-btn color="success" rounded class="mr-0" to="/add_expenses">
                   Settle up
-                </v-btn>
+                </v-btn> -->
               </v-col>
               <v-col class="text-right">
                 <v-btn color="success" rounded class="mx-2" to="/add_expenses">
@@ -31,7 +55,7 @@
               :color="item.category.categoryColor"
               :icon="item.category.imageName"
               :title="item.transactionName"
-              :value="item.amount"
+              :value="getAmount(item)"
               :sub-text="item.transactionDescription"
               :date="getDate(item.date)"
               :friends="item.friends"
@@ -39,7 +63,9 @@
               :isTransactions="true"
               :transactionId="item.transactionId"
               :groupId="groupId"
+              :groupName="groupName"
               type="group"
+              :transactionType="item.isOwn ? 'You transfered' :  'You received'"
             />
           </template>
         </base-material-card>
@@ -107,6 +133,8 @@ export default {
     groupInvites: [],
     groupId: "",
     groupName: "",
+    youSpent: 0.0,
+    youReceive: 0.0,
   }),
   created() {
     this.groupId = this.$route.params.id;
@@ -127,9 +155,16 @@ export default {
         };
         TransactionService.getTransactions(payload)
           .then((res) => {
-            console.log(res);
             if (res.data.body.transactions) {
               this.groupTransactions = res.data.body.transactions;
+            }
+
+            if (res.data.body.youSpent) {
+              this.youSpent = res.data.body.youSpent;
+            }
+
+            if (res.data.body.youReceive) {
+              this.youReceive = res.data.body.youReceive;
             }
 
             if (res.data.body.groupName) {
@@ -137,7 +172,6 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
           });
       }
     },
@@ -155,7 +189,6 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
           });
       }
     },
@@ -172,10 +205,16 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
           });
       }
     },
+    getAmount(item){
+      let amount  = 0.0
+      item.friends.forEach(element => {
+        amount += element.amount
+      });
+      return amount
+    }
   },
 };
 </script>

@@ -22,7 +22,7 @@ const router = new Router({
         // },
         // Pages
         {
-          name: 'Dashboard',
+          name: 'Group_1',
           path: '',
           component: () => import('@/views/dashboard/pages/Group/Group'),
           meta:{

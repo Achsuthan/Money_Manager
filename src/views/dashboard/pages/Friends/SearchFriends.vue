@@ -132,7 +132,6 @@ export default {
               }
             })
             .catch((err) => {
-              console.log("error");
             });
         } else {
           const payload = {
@@ -147,7 +146,6 @@ export default {
               }
             })
             .catch((err) => {
-              console.log("error");
             });
         }
       }
@@ -182,7 +180,6 @@ export default {
     sendRequest(index) {
       const singleUser = this.users[index];
       if (singleUser) {
-        console.log(singleUser);
         if (!this.isGroupSearch) {
           const payload = {
             userId: JSON.parse(localStorage.getItem("user")).userId,
@@ -204,7 +201,6 @@ export default {
             accessLevel: "2",
             groupId: this.groupId,
           };
-          console.log(payload)
           InivteService.sendGroupInvite(payload)
           .then(res =>{
             if(res.data.code == 200){

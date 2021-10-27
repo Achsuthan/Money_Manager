@@ -125,7 +125,6 @@ export default {
       };
       FriendsInvite.getAllGroupInvites(payload)
         .then((res) => {
-          console.log(res);
           if (res.data.body.receiveRequest) {
             this.rceiveInvites = res.data.body.receiveRequest;
           }
@@ -139,7 +138,6 @@ export default {
         });
     },
     deleteFriendsInvite(inviteId) {
-      console.log(inviteId);
       const payload = {
         userId: JSON.parse(localStorage.getItem("user")).userId,
         inviteId: inviteId,

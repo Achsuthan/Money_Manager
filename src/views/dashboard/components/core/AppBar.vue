@@ -39,15 +39,15 @@
       origin="top right"
       transition="scale-transition"
     >
-      <template v-slot:activator="{ attrs, on }">
-        <!-- <v-btn
+      <!-- <template v-slot:activator="{ attrs, on }">
+        <v-btn
           class="ml-0"
           min-width="0"
           text
           v-bind="attrs"
           to="/notifications"
           v-on="on"
-        > -->
+        >
 
         <v-btn
           class="ml-0"
@@ -57,7 +57,7 @@
           v-on="on"
         >
           <v-icon>mdi-bell</v-icon>
-          <!-- <v-badge
+          <v-badge
             color="red"
             overlap
             bordered
@@ -67,7 +67,7 @@
             </template>
 
             <v-icon>mdi-bell</v-icon>
-          </v-badge> -->
+          </v-badge>
         </v-btn>
         <!-- <v-btn
           tile
@@ -81,10 +81,10 @@
             mdi-plus
           </v-icon>
           Expenses
-        </v-btn> -->
-      </template>
+        </v-btn>
+      </template> -->
 
-      <!-- <v-list
+      <v-list
         :tile="false"
         nav
       >
@@ -96,7 +96,7 @@
             <v-list-item-title v-text="n" />
           </app-bar-item>
         </div>
-      </v-list> -->
+      </v-list>
     </v-menu>
 
     <v-btn
