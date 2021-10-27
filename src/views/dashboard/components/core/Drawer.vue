@@ -125,7 +125,7 @@
       },
       profile () {
         return {
-          title: 'Spending Tracker',
+          title: 'Spending Manager',
         }
       },
     },
