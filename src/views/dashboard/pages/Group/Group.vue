@@ -54,8 +54,8 @@
                 cols="12"
                 md="6"
               >
-                <template v-for="item in groups">
-                  <single-gorup-card :key="item.groupId" :groupName="item.groupName" :isOwner="item.isOwner" :groupId="item.groupId"/>
+                <template v-for="(item, index) in groups">
+                  <single-gorup-card :key="index+1" :groupName="item.groupName" :isOwner="item.isOwner" :groupId="item.groupId"/>
                 </template>
               </v-col>
             </v-row>
