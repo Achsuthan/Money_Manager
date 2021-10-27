@@ -1,11 +1,11 @@
 ## Money Manger Frontend System
 
 
-This project is fully developed using [Vue.js](https://vuejs.org).
+This project is developed using [Vue.js](https://vuejs.org).
 
 Dependencies used for this projects are
-1. [Vue CLI](https://cli.vuejs.org) used for routing, reactivity and some other vue activities
-2. [Vue Social Sharing](https://www.npmjs.com/package/vue-social-sharing) used for do the socail sharing
+1. [Vue CLI](https://cli.vuejs.org) used for routing, reactivity and some other vue related activities
+2. [Vue Social Sharing](https://www.npmjs.com/package/vue-social-sharing) used for the socail sharing
 3. [Vuetify](https://vuetifyjs.com/en/) all the UIs are developed using this framework
 4. [Moment.js](https://momentjs.com) used to handle the date format and converstion
 5. [Vue Notification](https://www.npmjs.com/package/vue-notification) all the alert messages handle using this plugin
