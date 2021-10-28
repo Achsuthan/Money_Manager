@@ -88,7 +88,7 @@ const router =  new Router({
         },
         {
           name: 'Search Friends',
-          path: '/search_friends',
+          path: '/search-friends',
           component: () => import('@/views/dashboard/pages/Friends/SearchFriends'),
           meta:{
             isAuth: true,
@@ -97,7 +97,7 @@ const router =  new Router({
         },
         {
           name: 'Search Friends',
-          path: '/search_friends_group/:id',
+          path: '/search-friends-group/:id',
           component: () => import('@/views/dashboard/pages/Friends/SearchFriends'),
           meta:{
             isAuth: true,

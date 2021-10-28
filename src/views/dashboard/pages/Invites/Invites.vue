@@ -17,7 +17,7 @@
                     fab
                     dark
                     color="primary"
-                    to="/search_friends"
+                    to="/search-friends"
                   >
                     <v-icon dark> mdi-plus </v-icon>
                   </v-btn>
@@ -25,16 +25,44 @@
               </v-list-item-content>
             </v-list-item>
           </template>
-          <template v-for="invite in friendInvites">
-            <base-invitation-card
-              :key="invite.inviteId"
-              :link="invite.link"
-              :inviteId="invite.inviteId"
-              :isFriend="true"
-              :email="invite.email"
-              :isDelete="true"
-              @deleteFriendsInvite="deleteFriendsInvite"
-            />
+          <template>
+            <template v-if="friendInvites.length == 0">
+              <v-card-text class="grow pa-0">
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-subtitle
+                      class="text-h4 font-weight-regular text-wrap text-center"
+                    >
+                      <br />
+                      You don't have any friends invitation.
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-subtitle
+                      class="text-h4 font-weight-regular text-wrap text-center"
+                    >
+                      <br />
+                      <v-btn color="primary" to="/search-friends">
+                        Create Friend Invitation
+                      </v-btn>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card-text>
+            </template>
+            <template v-for="invite in friendInvites">
+              <base-invitation-card
+                :key="invite.inviteId"
+                :link="invite.link"
+                :inviteId="invite.inviteId"
+                :isFriend="true"
+                :email="invite.email"
+                :isDelete="true"
+                @deleteFriendsInvite="deleteFriendsInvite"
+              />
+            </template>
           </template>
         </base-material-card>
       </v-col>
@@ -50,6 +78,20 @@
             </v-list-item>
           </template>
           <br />
+          <template v-if="rceiveInvites.length == 0 && sendInvites.length == 0">
+            <v-card-text class="grow pa-0">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle
+                    class="text-h4 font-weight-regular text-wrap text-center"
+                  >
+                    <br />
+                    You don't have any group invitation.
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card-text>
+          </template>
           <template v-if="rceiveInvites.length > 0">
             <v-list-item-title class="text-h5 font-weight-regular">
               Receive Invites

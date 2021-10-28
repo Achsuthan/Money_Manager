@@ -1,40 +1,17 @@
 <template>
-  <v-container
-    id="user-profile"
-    fluid
-    tag="section"
-  >
+  <v-container id="user-profile" fluid tag="section">
     <v-row justify="center">
-      <v-col
-        cols="12"
-        md="10"
-      >
-        <v-card
-          elevation="2"
-        >
+      <v-col cols="12" md="10">
+        <v-card elevation="2">
           <v-card-text>
-            <br>
+            <br />
             <v-row justify="end">
-              <v-btn
-                color="success"
-                to="/create-group"
-              >
-                Create Group
-              </v-btn>
+              <v-btn color="success" to="/create-group"> Create Group </v-btn>
             </v-row>
             <v-row justify="center">
-              <v-col
-                cols="12"
-                md="8"
-              >
-                <v-card
-                  color="orange pa-4"
-                  class=""
-                >
-                  <v-list-item
-                    class="grow"
-                    two-line
-                  >
+              <v-col cols="12" md="8">
+                <v-card color="orange pa-4" class="">
+                  <v-list-item class="grow" two-line>
                     <v-list-item-content>
                       <v-list-item-title
                         class="text-h2 font-weight-regular white--text center"
@@ -42,20 +19,53 @@
                         Groups
                       </v-list-item-title>
                     </v-list-item-content>
-                    
                   </v-list-item>
                 </v-card>
               </v-col>
             </v-row>
-            <v-row
-              justify="center"
-            >
-              <v-col
-                cols="12"
-                md="6"
-              >
+            <v-row justify="center">
+              <v-col cols="12" md="6">
+                <template v-if="groups.length == 0">
+                  <v-card-text class="grow pa-0">
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-subtitle
+                          class="
+                            text-h4
+                            font-weight-regular
+                            text-wrap text-center
+                          "
+                        >
+                          <br />
+                          You don't have any groups.
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-subtitle
+                          class="
+                            text-h4
+                            font-weight-regular
+                            text-wrap text-center
+                          "
+                        >
+                          <br />
+                          <v-btn color="primary" to="/create-group">
+                            Create Group
+                          </v-btn>
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-card-text>
+                </template>
                 <template v-for="(item, index) in groups">
-                  <single-gorup-card :key="index+1" :groupName="item.groupName" :isOwner="item.isOwner" :groupId="item.groupId"/>
+                  <single-gorup-card
+                    :key="index + 1"
+                    :groupName="item.groupName"
+                    :isOwner="item.isOwner"
+                    :groupId="item.groupId"
+                  />
                 </template>
               </v-col>
             </v-row>
@@ -67,32 +77,32 @@
 </template>
 
 <script>
-import SingleGorupCard from '../../../../components/base/SingleGorupCard.vue';
+import SingleGorupCard from "../../../../components/base/SingleGorupCard.vue";
 import GroupService from "../../../../services/groups";
-import AlertService from '../../../../utils/alertHandle'
-  export default {
+import AlertService from "../../../../utils/alertHandle";
+export default {
   components: { SingleGorupCard },
-    data: () => ({
-      groups: [],
-    }),
-    created(){
-      this.getAllGroups();
-    },
-    methods:{
-      getAllGroups(){
-        const payload = {
-          userId: JSON.parse(localStorage.getItem("user")).userId
-        }
-        GroupService.getAllGroups(payload)
-        .then(res =>{
-          if(res.data.body.group){
+  data: () => ({
+    groups: [],
+  }),
+  created() {
+    this.getAllGroups();
+  },
+  methods: {
+    getAllGroups() {
+      const payload = {
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+      };
+      GroupService.getAllGroups(payload)
+        .then((res) => {
+          if (res.data.body.group) {
             this.groups = res.data.body.group;
           }
         })
-        .catch(res=>{
-          AlertService.errorMessage(res.message)
-        })
-      }
-    }
-  }
+        .catch((res) => {
+          AlertService.errorMessage(res.message);
+        });
+    },
+  },
+};
 </script>
