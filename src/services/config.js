@@ -2,7 +2,7 @@
 
 let port = "dev"
 let baseURL = "http://localhost:8080/Money_Manager_Backend"
-let siteBaseUrl = "http://localhost:8081?"
+let siteBaseUrl = "http://localhost:8081/invite/"
 
 
 if(port === "dev"){
