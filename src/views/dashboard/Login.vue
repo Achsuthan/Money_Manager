@@ -120,7 +120,7 @@ export default {
       this.isLogin = isLoginStatus;
       this.isEmailDisable = false;
 
-      if (!isLoginStatus) {
+      if (!isLoginStatus && this.$route.query.inviteId) {
         this.onGetSingleInvite();
       }
     },
