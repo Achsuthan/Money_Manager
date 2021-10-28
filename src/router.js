@@ -25,7 +25,7 @@ const router = new Router({
           name: 'Group_1',
           path: '',
           component: () => import('@/views/dashboard/pages/Group/Group'),
-          meta:{
+          meta: {
             isAuth: true,
           }
         },
@@ -60,6 +60,33 @@ const router = new Router({
           component: () => import('@/views/dashboard/pages/Transactions/ListingTransactions'),
           meta: {
             isAuth: true,
+          }
+        },
+        {
+          name: 'Add Friend Transactions',
+          path: '/transactions/friend/add_transaction',
+          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          meta: {
+            isAuth: true,
+            title: 'Add Friend Transactions'
+          }
+        },
+        {
+          name: 'Own Transactions',
+          path: '/transactions/own/add_transaction',
+          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          meta: {
+            isAuth: true,
+            title: 'Add Own Transactions'
+          }
+        },
+        {
+          name: 'Group Transactions',
+          path: '/transactions/group/add_transaction',
+          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          meta: {
+            isAuth: true,
+            title: 'Add Group Transactions'
           }
         },
         {
