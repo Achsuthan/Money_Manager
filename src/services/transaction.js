@@ -47,7 +47,63 @@ const getFriendsTransaction = (type, payload) => {
 
 }
 
+const getAllCategories = () => {
+  return instance.instance
+    .get("/GetCategories")
+    .then(function (response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
+
+const getAllFriendsByUserId = (payload) => {
+  return instance.instance
+    .get(`/friend-request?userId=${payload.userId}`)
+    .then(function (response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
+
+const getAllGroupFriendsByUserId = (payload) => {
+  return instance.instance
+    .get(`/GetUsersFromGroup?userId=${payload.userId}&groupId=${payload.groupId}`)
+    .then(function (response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
+
+const addTransactions = (payload) => {
+  return instance.instance
+    .post(`/transaction`, payload)
+    .then(function (response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
+
 export default {
   getTransactions: getTransactions,
-  getFriendsTransaction: getFriendsTransaction
+  getFriendsTransaction: getFriendsTransaction,
+  getAllCategories: getAllCategories,
+  getAllFriendsByUserId: getAllFriendsByUserId,
+  getAllGroupFriendsByUserId: getAllGroupFriendsByUserId,
+  addTransactions: addTransactions
 };

@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const router =  new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -33,7 +33,7 @@ const router =  new Router({
           name: 'Profile',
           path: '/profile',
           component: () => import('@/views/dashboard/pages/Profile/Profile'),
-          meta:{
+          meta: {
             isAuth: true,
           }
         },
@@ -41,7 +41,7 @@ const router =  new Router({
           name: 'Group',
           path: '/group',
           component: () => import('@/views/dashboard/pages/Group/Group'),
-          meta:{
+          meta: {
             isAuth: true,
           }
         },
@@ -50,7 +50,7 @@ const router =  new Router({
           name: 'Create Group',
           path: '/create-group',
           component: () => import('@/views/dashboard/pages/Group/CreateGroup'),
-          meta:{
+          meta: {
             isAuth: true,
           }
         },
@@ -58,7 +58,7 @@ const router =  new Router({
           name: 'Group Info',
           path: '/group/:id',
           component: () => import('@/views/dashboard/pages/Group/GroupInfo'),
-          meta:{
+          meta: {
             isAuth: true,
           }
         },
@@ -66,15 +66,45 @@ const router =  new Router({
           name: 'Transactions',
           path: '/transactions',
           component: () => import('@/views/dashboard/pages/Transactions/ListingTransactions'),
-          meta:{
+          meta: {
             isAuth: true,
+          }
+        },
+        {
+          name: 'Add Friend Transactions',
+          path: '/transactions/friend/add_transaction',
+          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          meta: {
+            isAuth: true,
+            title: 'Add Friend Transactions',
+            type: "friend"
+          }
+        },
+        {
+          name: 'Own Transactions',
+          path: '/transactions/own/add_transaction',
+          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          meta: {
+            isAuth: true,
+            title: 'Add Own Transactions',
+            type: "personal"
+          }
+        },
+        {
+          name: 'Group Transactions',
+          path: '/transactions/group/:groupId/add_transaction',
+          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          meta: {
+            isAuth: true,
+            title: 'Add Group Transactions',
+            type: "group"
           }
         },
         {
           name: 'Invites',
           path: '/invites',
           component: () => import('@/views/dashboard/pages/Invites/Invites'),
-          meta:{
+          meta: {
             isAuth: true,
           }
         },
@@ -82,7 +112,7 @@ const router =  new Router({
           name: 'Friends',
           path: '/friends',
           component: () => import('@/views/dashboard/pages/Friends/Friends'),
-          meta:{
+          meta: {
             isAuth: true,
           }
         },
@@ -90,7 +120,7 @@ const router =  new Router({
           name: 'Search Friends',
           path: '/search-friends',
           component: () => import('@/views/dashboard/pages/Friends/SearchFriends'),
-          meta:{
+          meta: {
             isAuth: true,
             isGroup: false
           }
@@ -99,7 +129,7 @@ const router =  new Router({
           name: 'Search Friends',
           path: '/search-friends-group/:id',
           component: () => import('@/views/dashboard/pages/Friends/SearchFriends'),
-          meta:{
+          meta: {
             isAuth: true,
             isGroup: true
           }
@@ -108,7 +138,7 @@ const router =  new Router({
           name: 'Add Expenses',
           path: '/add_expenses',
           component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
-          meta:{
+          meta: {
             isAuth: true,
           }
         },
@@ -118,7 +148,7 @@ const router =  new Router({
       name: 'Login',
       path: '/login',
       component: () => import('./views/dashboard/Login'),
-      meta:{
+      meta: {
         isAuth: false,
       }
     },
@@ -129,10 +159,10 @@ const router =  new Router({
   ],
 })
 
-router.beforeEach((to,from,next) => {
-  if(to.meta.isAuth){
+router.beforeEach((to, from, next) => {
+  if (to.meta.isAuth) {
     let user = JSON.parse(localStorage.getItem("user"));
-    if(!user){
+    if (!user) {
       next("/login");
       return
     }

@@ -6,16 +6,18 @@
           <template v-slot:heading>
             <v-list-item class="grow pa-0" three-line>
               <v-list-item-content>
-                <v-list-item-title class="text-h5 font-weight-regular text-wrap">
-                  {{groupName}} Transactions
+                <v-list-item-title
+                  class="text-h5 font-weight-regular text-wrap"
+                >
+                  {{ groupName }} Transactions
                 </v-list-item-title>
                 <v-list-item-subtitle class="font-weight-bold">
                 </v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-content class="text-right">
                 <v-list-item-title class="text-h5 font-weight-regular">
-                  <v-list-item-title class="text-h2 font-weight-regular ">
-                    $ {{youReceive.toFixed(2)}}
+                  <v-list-item-title class="text-h2 font-weight-regular">
+                    $ {{ youReceive.toFixed(2) }}
                     <v-list-item-subtitle class="font-weight-bold">
                       Received
                     </v-list-item-subtitle>
@@ -25,7 +27,7 @@
               <v-list-item-content class="text-right">
                 <v-list-item-title class="text-h4 font-weight-regular">
                   <v-list-item-title class="text-h2 font-weight-regular">
-                    $ {{youSpent.toFixed(2)}}
+                    $ {{ youSpent.toFixed(2) }}
                     <v-list-item-subtitle class="font-weight-bold">
                       Transfered
                     </v-list-item-subtitle>
@@ -43,7 +45,12 @@
                 </v-btn> -->
               </v-col>
               <v-col class="text-right">
-                <v-btn color="success" rounded class="mx-2" to="/add_expenses">
+                <v-btn
+                  color="success"
+                  rounded
+                  class="mx-2"
+                  :to="`/transactions/group/${this.groupId}/add_transaction`"
+                >
                   Add Expenses
                 </v-btn>
               </v-col>
@@ -65,7 +72,7 @@
               :groupId="groupId"
               :groupName="groupName"
               type="group"
-              :transactionType="item.isOwn ? 'You transfered' :  'You received'"
+              :transactionType="item.isOwn ? 'You transfered' : 'You received'"
             />
           </template>
         </base-material-card>
@@ -171,8 +178,7 @@ export default {
               this.groupName = res.data.body.groupName;
             }
           })
-          .catch((err) => {
-          });
+          .catch((err) => {});
       }
     },
 
@@ -188,8 +194,7 @@ export default {
               this.users = res.data.body.users;
             }
           })
-          .catch((err) => {
-          });
+          .catch((err) => {});
       }
     },
     getInviteLinks() {
@@ -204,17 +209,16 @@ export default {
               this.groupInvites = res.data.body.groupInvites;
             }
           })
-          .catch((err) => {
-          });
+          .catch((err) => {});
       }
     },
-    getAmount(item){
-      let amount  = 0.0
-      item.friends.forEach(element => {
-        amount += element.amount
+    getAmount(item) {
+      let amount = 0.0;
+      item.friends.forEach((element) => {
+        amount += element.amount;
       });
-      return amount
-    }
+      return amount;
+    },
   },
 };
 </script>

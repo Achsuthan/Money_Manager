@@ -69,7 +69,7 @@
             <v-icon>mdi-bell</v-icon>
           </v-badge>
         </v-btn>
-        <v-btn
+        <!-- <v-btn
           tile
           color="success"
           to="/add_expenses"
