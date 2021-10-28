@@ -1,24 +1,19 @@
-# expense_tracker
+## Money Manger Frontend System
 
-## Project setup
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
+This project is developed using [Vue.js](https://vuejs.org).
+
+Dependencies used for this projects are
+- [Vue CLI](https://cli.vuejs.org) used for routing, reactivity and some other vue related activities
+- [Vue Social Sharing](https://www.npmjs.com/package/vue-social-sharing) used for the socail sharing
+- [Vuetify](https://vuetifyjs.com/en/) all the UIs are developed using this framework
+- [Moment.js](https://momentjs.com) used to handle the date format and converstion
+- [Vue Notification](https://www.npmjs.com/package/vue-notification) all the alert messages handle using this plugin
+
+In order to run this project npm and node.js required, which can be download from this [link](https://nodejs.org/en/download/). After the install the npm and node.js by executing this command we can run this application.
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+This project backend build using java the source code can be found from this [link](https://github.com/Achsuthan/money_manager_backend)

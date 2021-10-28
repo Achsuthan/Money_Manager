@@ -28,7 +28,7 @@
 
       <v-list-item-content class="text-right">
         <v-list-item-title class="text-h5 font-weight-regular mr-6">
-          <v-btn elevation="0" fab dark color="primary" to="search_friends">
+          <v-btn elevation="0" fab dark color="primary" to="search-friends">
             <v-icon dark> mdi-account-plus </v-icon>
           </v-btn>
         </v-list-item-title>
@@ -37,7 +37,42 @@
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="i in 3" :key="i" :value="'tab-' + i">
           <v-card flat class="mr-8 ml-8">
-            <template v-if="i == 1 && friends.length > 0">
+            <template v-if="i == 1">
+              <template v-if="friends.length == 0">
+                <v-card-text class="grow pa-0">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        class="
+                          text-h4
+                          font-weight-regular
+                          text-wrap text-center
+                        "
+                      >
+                        <br />
+                        You don't have any friends.
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        class="
+                          text-h4
+                          font-weight-regular
+                          text-wrap text-center
+                        "
+                      >
+                        <br />
+                        <v-btn color="primary" to="/search-friends">
+                          Search and sent friend request
+                        </v-btn>
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card-text>
+              </template>
+
               <template v-for="item in friends">
                 <base-single-friend-card
                   :key="item.friendsId"
@@ -50,7 +85,42 @@
               </template>
             </template>
 
-            <template v-else-if="sentRequest.length > 0 && i == 2">
+            <template v-else-if="i == 2">
+              <template v-if="sentRequest.length == 0">
+                <v-card-text class="grow pa-0">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        class="
+                          text-h4
+                          font-weight-regular
+                          text-wrap text-center
+                        "
+                      >
+                        <br />
+                        You don't have any sent friend requests.
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        class="
+                          text-h4
+                          font-weight-regular
+                          text-wrap text-center
+                        "
+                      >
+                        <br />
+                        <v-btn color="primary" to="/search-friends">
+                          Search and sent friend request
+                        </v-btn>
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card-text>
+              </template>
+
               <template v-for="item in sentRequest">
                 <base-single-friend-card
                   :key="item.friendsId"
@@ -63,7 +133,26 @@
                 />
               </template>
             </template>
-            <template v-else-if="i == 3 && receiveRequest.length > 0">
+            <template v-else-if="i == 3">
+              <template v-if="sentRequest.length == 0">
+                <v-card-text class="grow pa-0">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        class="
+                          text-h4
+                          font-weight-regular
+                          text-wrap text-center
+                        "
+                      >
+                        <br />
+                        You don't have any receive friend requests.
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card-text>
+              </template>
+
               <template v-for="item in receiveRequest">
                 <base-single-friend-card
                   :key="item.friendsId"
@@ -119,15 +208,15 @@ export default {
           AlertHandler.errorMessage(err.message);
         });
     },
-    deleteFriendRequest(requestId){
+    deleteFriendRequest(requestId) {
       const payload = {
         userId: JSON.parse(localStorage.getItem("user")).userId,
-        friendRequestId: requestId
-      }
+        friendRequestId: requestId,
+      };
 
       FriendService.deleteFriendReqeust(payload)
         .then((res) => {
-          this.getAllFriends()
+          this.getAllFriends();
         })
         .catch((res) => {
           AlertHandler.errorMessage(err.message);
@@ -137,11 +226,11 @@ export default {
       const payload = {
         userId: JSON.parse(localStorage.getItem("user")).userId,
         friendsRequestId: requestId,
-      }
+      };
 
       FriendService.acceptFriendRequest(payload)
         .then((res) => {
-          this.getAllFriends()
+          this.getAllFriends();
         })
         .catch((res) => {
           AlertHandler.errorMessage(err.message);

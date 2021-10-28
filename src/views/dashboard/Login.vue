@@ -1,5 +1,5 @@
 <template>
-  <v-app :style="primary">
+  <v-app>
     <v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
       <v-container id="user-profile" fluid tag="section">
         <base-material-card>
@@ -119,7 +119,7 @@ export default {
         LoginService.login(payload)
           .then((res) => {
             localStorage.setItem("user", JSON.stringify(res.data.body));
-            this.$router.push('/');
+            this.$router.push('/group');
           })
           .catch((err) => {
             AlertHandler.errorMessage(err.message);

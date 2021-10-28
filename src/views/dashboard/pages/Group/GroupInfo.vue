@@ -86,7 +86,7 @@
                   fab
                   dark
                   color="primary"
-                  :to="'/search_friends_group/' + this.groupId"
+                  :to="'/search-friends-group/' + this.groupId"
                 >
                   <v-icon dark> mdi-plus </v-icon>
                 </v-btn>
