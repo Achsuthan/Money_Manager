@@ -119,7 +119,7 @@ export default {
         LoginService.login(payload)
           .then((res) => {
             localStorage.setItem("user", JSON.stringify(res.data.body));
-            this.$router.push('/');
+            this.$router.push('/group');
           })
           .catch((err) => {
             AlertHandler.errorMessage(err.message);

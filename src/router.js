@@ -21,10 +21,18 @@ const router =  new Router({
         //   }
         // },
         // Pages
+        // {
+        //   name: 'Group_1',
+        //   path: '',
+        //   component: () => import('@/views/dashboard/pages/Group/Group'),
+        //   meta:{
+        //     isAuth: true,
+        //   }
+        // },
         {
-          name: 'Group_1',
-          path: '',
-          component: () => import('@/views/dashboard/pages/Group/Group'),
+          name: 'Profile',
+          path: '/profile',
+          component: () => import('@/views/dashboard/pages/Profile/Profile'),
           meta:{
             isAuth: true,
           }
@@ -116,7 +124,7 @@ const router =  new Router({
     },
     {
       path: '*',
-      redirect: '/',
+      redirect: '/group',
     },
   ],
 })
