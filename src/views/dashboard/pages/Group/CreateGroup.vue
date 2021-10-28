@@ -52,7 +52,7 @@ export default {
         GroupService.createGroup(payload)
           .then((res) => {
             if (res.data.code == 200) {
-              this.$router.push("/group");
+              this.$router.push("/");
             }
           })
           .catch((res) => {

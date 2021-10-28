@@ -39,23 +39,48 @@
 
           <v-col>
             <v-row>
-              <v-col>
-                <!-- <v-btn color="success" rounded class="mr-0" to="/add_expenses">
-                  Settle up
-                </v-btn> -->
-              </v-col>
+              <v-col> </v-col>
               <v-col class="text-right">
                 <v-btn
                   color="success"
                   rounded
                   class="mx-2"
-                  :to="`/transactions/group/${this.groupId}/add_transaction`"
+                  :to="`/add_transaction/group/${this.groupId}`"
                 >
-                  Add Expenses
+                  Add Transaction
                 </v-btn>
               </v-col>
             </v-row>
           </v-col>
+
+          <template v-if="groupTransactions.length == 0">
+              <v-card-text class="grow pa-0">
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-subtitle
+                      class="text-h4 font-weight-regular text-wrap text-center"
+                    >
+                      <br />
+                      You don't have any {{friends.length > 0 ? 'transactions' : 'friends'}} this group.
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-subtitle
+                      class="text-h4 font-weight-regular text-wrap text-center"
+                    >
+                      <br />
+                      <v-btn color="primary" :to="friends.length >0 ? `/add_transaction/group/${this.groupId}` : `/search-friends-group/${this.groupId}`">
+                        Add {{friends.length > 0 ? 'transactions' : 'Friends'}}
+                      </v-btn>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card-text>
+            </template>
+
+
           <template v-for="(item, index) in groupTransactions">
             <base-material-stats-card
               :key="index + 1"
@@ -71,6 +96,7 @@
               :transactionId="item.transactionId"
               :groupId="groupId"
               :groupName="groupName"
+              :category="item.category.categoryName"
               type="group"
               :transactionType="item.isOwn ? 'You transfered' : 'You received'"
             />
@@ -100,6 +126,32 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <template v-if="users.length == 0">
+              <v-card-text class="grow pa-0">
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-subtitle
+                      class="text-h4 font-weight-regular text-wrap text-center"
+                    >
+                      <br />
+                      You don't Friends in to this group.
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-subtitle
+                      class="text-h4 font-weight-regular text-wrap text-center"
+                    >
+                      <br />
+                      <v-btn color="primary" :to="'/search-friends-group/' + this.groupId">
+                        Add friends to this group
+                      </v-btn>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card-text>
+            </template>
           <template v-for="(item, index) in users">
             <base-single-person-card
               :key="index + 1"
@@ -107,7 +159,7 @@
               :name="item.userName"
             />
           </template>
-          <v-list-item class="grow mt-12" two-line>
+          <v-list-item class="grow mt-12" two-line v-if="groupInvites.length > 0">
             <v-list-item-content>
               <v-list-item-title class="text-h5 font-weight-regular">
                 Invitations
@@ -115,13 +167,14 @@
             </v-list-item-content>
           </v-list-item>
           <template v-for="(item, index) in groupInvites">
-            <base-invitation-card
+            <base-group-invitation-card
               :key="index + 1"
               :link="item.inviteLink"
               :inviteId="item.groupInviteId"
-              :email="item.receiver.email"
+              :isReceive="false"
+              @deleteGroupInvitation="deleteGroupInvitation"
+              :description="getDescription(item, true)"
             />
-            <!-- @deleteFriendsInvite="deleteFriendsInvite" -->
           </template>
         </base-material-card>
       </v-col>
@@ -132,11 +185,14 @@
 <script>
 import TransactionService from "@/services/transaction";
 import GroupService from "@/services/groups";
+import FriendsInvite from "@/services/Invite";
 import CommonUtil from "@/utils/common";
+import AlertHandler from "@/utils/alertHandle";
 export default {
   data: () => ({
     groupTransactions: [],
     users: [],
+    friends:[],
     groupInvites: [],
     groupId: "",
     groupName: "",
@@ -148,6 +204,7 @@ export default {
     this.getTransacitons();
     this.getUsersBasedOnGroup();
     this.getInviteLinks();
+    this.getAllFriendsGroup();
   },
   methods: {
     getDate(dateString) {
@@ -219,6 +276,48 @@ export default {
       });
       return amount;
     },
+    getDescription(item) {
+      return (
+        "You requested " +
+        item.receiver.name +
+        " to join to " +
+        item.groupName +
+        "group"
+      );
+    },
+    deleteGroupInvitation(invitationId) {
+      const payload = {
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+        groupInviteId: invitationId,
+      };
+      FriendsInvite.deleteGroupInviteId(payload)
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.getInviteLinks();
+          }
+        })
+        .catch((res) => {
+          AlertHandler.errorMessage(res.message);
+        });
+    },
+    getAllFriendsGroup(){
+
+      const payload = 
+      {
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+        groupId: this.groupId
+      }
+
+      TransactionService
+          .getAllGroupFriendsByUserId(payload)
+          .then((res) => {
+            if (res.data.body.users) {
+              this.friends = res.data.body.users
+            }
+          })
+          .catch((err) => {
+          });
+    }
   },
 };
 </script>

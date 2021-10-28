@@ -39,7 +39,7 @@ const router = new Router({
         },
         {
           name: 'Group',
-          path: '/group',
+          path: '/',
           component: () => import('@/views/dashboard/pages/Group/Group'),
           meta: {
             isAuth: true,
@@ -72,8 +72,8 @@ const router = new Router({
         },
         {
           name: 'Add Friend Transactions',
-          path: '/transactions/friend/add_transaction',
-          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          path: '/add_transaction/friend/',
+          component: () => import('@/views/dashboard/pages/AddTransaction/AddTransaction'),
           meta: {
             isAuth: true,
             title: 'Add Friend Transactions',
@@ -82,8 +82,8 @@ const router = new Router({
         },
         {
           name: 'Own Transactions',
-          path: '/transactions/own/add_transaction',
-          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          path: '/add_transaction/own',
+          component: () => import('@/views/dashboard/pages/AddTransaction/AddTransaction'),
           meta: {
             isAuth: true,
             title: 'Add Own Transactions',
@@ -92,8 +92,8 @@ const router = new Router({
         },
         {
           name: 'Group Transactions',
-          path: '/transactions/group/:groupId/add_transaction',
-          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          path: '/add_transaction/group/:groupId',
+          component: () => import('@/views/dashboard/pages/AddTransaction/AddTransaction'),
           meta: {
             isAuth: true,
             title: 'Add Group Transactions',
@@ -135,9 +135,9 @@ const router = new Router({
           }
         },
         {
-          name: 'Add Expenses',
+          name: 'Add Transaction',
           path: '/add_expenses',
-          component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
+          component: () => import('@/views/dashboard/pages/AddTransaction/AddTransaction'),
           meta: {
             isAuth: true,
           }

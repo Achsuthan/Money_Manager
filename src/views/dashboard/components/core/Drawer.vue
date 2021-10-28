@@ -90,7 +90,7 @@
         {
           icon: 'mdi-account-group',
           title: 'Group',
-          to: '/group',
+          to: '/',
         },
         {
           icon: 'mdi-bank-transfer',

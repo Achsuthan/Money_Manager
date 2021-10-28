@@ -3,15 +3,6 @@
     <v-card-text class="grow pa-0">
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-subtitle class="text-h4 font-weight-regular text-wrap">
-            <a
-              :href="link"
-              target="_blank"
-              class="green--text"
-            >
-              {{siteBaseUrl + "groupInvite=" + link}}
-            </a>
-          </v-list-item-subtitle>
 
           <v-list-item-subtitle class="text-h4 font-weight-regular text-wrap">
             <br/>

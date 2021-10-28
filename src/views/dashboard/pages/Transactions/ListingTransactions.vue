@@ -39,23 +39,50 @@
 
           <v-col>
             <v-row>
-              <v-col>
-                <!-- <v-btn color="success" rounded class="mr-0" to="/add_expenses">
-                  Settle up
-                </v-btn> -->
-              </v-col>
+              <v-col> </v-col>
               <v-col class="text-right">
                 <v-btn
                   color="success"
                   rounded
                   class="mx-2"
-                  to="/transactions/friend/add_transaction"
+                  to="/add_transaction/friend/"
                 >
-                  Add Expenses
+                  Add Transaction
                 </v-btn>
               </v-col>
             </v-row>
           </v-col>
+
+          <template v-if="friendsTransactions.length == 0">
+            <v-card-text class="grow pa-0">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle
+                    class="text-h4 font-weight-regular text-wrap text-center"
+                  >
+                    <br />
+                    You don't have any {{friends.length >0 ? 'transactions' : 'friends'}}.
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle
+                    class="text-h4 font-weight-regular text-wrap text-center"
+                  >
+                    <br />
+                    <v-btn
+                      color="primary"
+                      :to="friends.length >0 ? '/add_transaction/friend/' : '/search-friends'"
+                    >
+                      Add {{friends.length >0 ? 'Transaction' : 'Friend'}}
+                    </v-btn>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card-text>
+          </template>
+
           <template v-for="item in friendsTransactions">
             <base-material-stats-card
               :color="item.category.color"
@@ -68,9 +95,9 @@
               :isOwn="item.isOwn"
               :isTransactions="true"
               :transactionId="item.transactionId"
+              :category="item.category.categoryName"
               :transactionType="item.isOwn ? 'You transfered' : 'You received'"
             />
-            <!-- {{String(item.isOwn)}}  {{item.friends}} -->
           </template>
         </base-material-card>
       </v-col>
@@ -117,13 +144,43 @@
                   color="success"
                   rounded
                   class="mx-2"
-                  to="/transactions/own/add_transaction"
+                  to="/add_transaction/own"
                 >
-                  Add Expenses
+                  Add Transaction
                 </v-btn>
               </v-col>
             </v-row>
           </v-col>
+
+          <template v-if="ownTransacitons.length == 0">
+            <v-card-text class="grow pa-0">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle
+                    class="text-h4 font-weight-regular text-wrap text-center"
+                  >
+                    <br />
+                    You don't have any transactions.
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle
+                    class="text-h4 font-weight-regular text-wrap text-center"
+                  >
+                    <br />
+                    <v-btn
+                      color="primary"
+                      to="/add_transaction/own"
+                    >
+                      Add Transaction
+                    </v-btn>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card-text>
+          </template>
 
           <template v-for="item in ownTransacitons">
             <base-material-stats-card
@@ -135,6 +192,7 @@
               :key="item.transactionId"
               :isTransactions="false"
               :transactionId="item.transactionId"
+              :category="item.category.categoryName"
               :transactionType="
                 item.transactionType.toLowerCase() == 'income'
                   ? 'Your Income '
@@ -159,10 +217,12 @@ export default {
     spent: 0.0,
     income: 0.0,
     expenses: 0.0,
+    friends:[],
   }),
   created() {
     this.getOwnTransacitons();
     this.getFriendsTransacitons();
+    this.getFriends();
   },
   methods: {
     getOwnTransacitons() {
@@ -201,6 +261,18 @@ export default {
           }
           if (res.data.body.youSpent) {
             this.spent = res.data.body.youSpent;
+          }
+        })
+        .catch((err) => {});
+    },
+    getFriends() {
+      const payload = {
+        userId: JSON.parse(localStorage.getItem("user")).userId
+      }
+      TransactionService.getAllFriendsByUserId(payload)
+        .then((res) => {
+          if (res.data.body.friends) {
+            this.friends = res.data.body.friends
           }
         })
         .catch((err) => {});

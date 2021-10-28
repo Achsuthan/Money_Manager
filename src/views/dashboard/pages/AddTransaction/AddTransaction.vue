@@ -1,32 +1,6 @@
 <template>
   <v-container id="user-profile" fluid tag="section">
     <v-row justify="center">
-      <!-- <v-col
-        cols="12"
-        md="6"
-      >
-        <base-material-card
-          color="orange"
-        >
-          <template v-slot:heading>
-            <v-list-item
-              class="grow pa-0"
-              two-line
-            >
-              <v-list-item-content>
-                <v-list-item-title
-                  class="text-h5 font-weight-regular"
-                >
-                  Do you want to settle this balance with?
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-          <base-single-person-card />
-          <base-single-person-card />
-          <base-single-person-card />
-        </base-material-card>
-      </v-col> -->
       <v-col cols="12" md="12">
         <base-material-card color="orange">
           <template v-slot:heading>
@@ -85,20 +59,20 @@
             >
               <template v-slot:selection="{ item }">
                 <v-chip>
-                  <span>{{ item.name }}</span>
+                  <span>{{ $route.meta.type == 'group' ? `${item.userName} (${item.email})` : $route.meta.type == 'friend' ? `${item.name} (${item.email})` : ''}}</span>
                 </v-chip>
               </template>
             </v-select>
-
-            <h1 v-if="selectFriend.length > 0">Selected Friend</h1>
+              <span class="font-weight-bold text-h4"  v-if="selectFriend.length> 0">Selected Friend </span>
             <v-row
               justify="space-between"
               v-for="friend in selectFriend"
               :key="friend.userId"
             >
-              <v-col cols="6" md="6" align-self="right">{{
-                friend.name
-              }}</v-col>
+              <v-col cols="6" md="6" align-self="right">
+                
+                {{ $route.meta.type == 'group' ? `${friend.userName} (${friend.email})` : $route.meta.type == 'friend' ? `${friend.name} (${friend.email})` : ''}}
+              </v-col>
               <v-col cols="6" md="6">
                 <v-text-field
                   label="Percentage"
@@ -109,8 +83,10 @@
                 />
               </v-col>
             </v-row>
-            <span class="font-weight-bold text-h4">Selected Date: </span>
+            <v-row justify="start" class="pl-4">
+              <span class="font-weight-bold text-h4">Selected Date: </span>
             <span> {{ date ? date : "No date Selected" }} </span>
+            </v-row>
             <v-row justify="start" class="pl-4">
               <v-date-picker v-model="date" :max="getMaxDate()" />
             </v-row>
@@ -145,7 +121,7 @@ export default {
       categoryId: "",
       amount: null,
       date: moment(new Date()).format("YYYY-MM-DD"),
-      nameRules: [(v) => !!v || "Title is required"],
+      nameRules: [(v) => !!v || "Transaction name is required"],
       transactionRules: [(v) => !!v || "Transaction Type is required"],
       categoryRules: [(v) => !!v || "Category Type is required"],
       amountRules: [(v) => !!v || "Amount Type is required"],
@@ -197,10 +173,10 @@ export default {
               AlertHandler.errorMessage("Please add some friends");
               this.isSubmitDisable = true;
             }
-            this.friendlist = res.data.body.friends.map((x) => {
+            this.friendlist = res.data.body.friends.map((x, index) => {
               return {
                 ...x,
-                displayText: `${x.name} -${x.userId}`,
+                displayText: `${x.name} (${x.email})`,
                 persentage: null,
               };
             });
@@ -226,7 +202,7 @@ export default {
             this.friendlist = res.data.body.users.map((x) => {
               return {
                 ...x,
-                displayText: `${x.userName} -${x.userId}`,
+                displayText: `${x.userName} (${x.email})`,
                 persentage: null,
               };
             });
@@ -247,7 +223,7 @@ export default {
       if (isValid) {
         let payload = {
           name: this.name,
-          amount: parseFloat(this.amount),
+          amount: parseFloat(this.amount).toFixed(2),
           date: this.date,
           categoryId: this.categoryId,
           userId: JSON.parse(localStorage.getItem("user")).userId,
@@ -260,7 +236,7 @@ export default {
           payload.friends = this.selectFriend.map((x) => {
             return {
               friendId: x.userId,
-              persentage: x.persentage,
+              persentage: x.persentage.toFixed(2),
             };
           });
         }

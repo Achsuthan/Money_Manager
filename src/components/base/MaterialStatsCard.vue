@@ -53,11 +53,14 @@
             v-text="title"
           />
           <h3 class="text-h3 font-weight-light text--primary">
-             <small style="font-size:12px;"> {{transactionType}}</small>
+            <small style="font-size: 12px"> {{ transactionType }}</small>
             $ {{ value }}
           </h3>
           <h4 class="text-h4 font-weight-light text--primary">
             {{ date }}
+          </h4>
+          <h4 class="text-h4 font-weight-light text--primary">
+            {{ category }}
           </h4>
         </div>
       </template>
@@ -93,7 +96,8 @@
                 <template v-for="(friend, index) in friends">
                   <v-chip class="p-3 mr-4" :key="index + 1">
                     <span style="font-size: 16px">
-                      $ {{ friend.amount }} to {{ friend.userId == userId ? 'you': friend.name }}
+                      $ {{ friend.amount }} to
+                      {{ friend.userId == userId ? "you" : friend.name }}
                     </span>
                   </v-chip>
                 </template>
@@ -114,11 +118,12 @@
                 </span>
                 <br />
                 <br />
-                
+
                 <template v-for="(friend, index) in transactionFriends">
                   <v-chip class="p-3 mr-4" :key="index">
                     <span style="font-size: 16px">
-                      $ {{ friend.amount }} to {{ friend.userId == userId ? 'you': friend.userName }}
+                      $ {{ friend.amount }} to
+                      {{ friend.userId == userId ? "you" : friend.userName }}
                     </span>
                   </v-chip>
                 </template>
@@ -218,9 +223,13 @@ export default {
       type: String,
       default: "",
     },
-    transactionType:{
+    transactionType: {
       type: String,
-      default:""
+      default: "",
+    },
+    category:{
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -263,7 +272,7 @@ export default {
       ],
     };
   },
-  mounted(){
+  mounted() {
     this.userId = JSON.parse(localStorage.getItem("user")).userId;
   },
   methods: {
@@ -305,7 +314,7 @@ export default {
           }
         });
       }
-      if(this.groupName){
+      if (this.groupName) {
         string += `\non '${this.groupName}' group`;
       }
       this.sharingText = string;
