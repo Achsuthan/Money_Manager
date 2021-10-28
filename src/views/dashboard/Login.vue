@@ -1,5 +1,5 @@
 <template>
-  <v-app :style="primary">
+  <v-app>
     <v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
       <v-container id="user-profile" fluid tag="section">
         <base-material-card>
