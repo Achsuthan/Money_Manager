@@ -33,7 +33,7 @@ const router = new Router({
           name: 'Profile',
           path: '/profile',
           component: () => import('@/views/dashboard/pages/Profile/Profile'),
-          meta:{
+          meta: {
             isAuth: true,
           }
         },
@@ -76,7 +76,8 @@ const router = new Router({
           component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
           meta: {
             isAuth: true,
-            title: 'Add Friend Transactions'
+            title: 'Add Friend Transactions',
+            type: "friend"
           }
         },
         {
@@ -85,16 +86,18 @@ const router = new Router({
           component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
           meta: {
             isAuth: true,
-            title: 'Add Own Transactions'
+            title: 'Add Own Transactions',
+            type: "personal"
           }
         },
         {
           name: 'Group Transactions',
-          path: '/transactions/group/add_transaction',
+          path: '/transactions/group/:groupId/add_transaction',
           component: () => import('@/views/dashboard/pages/Expenses/AddExpenses'),
           meta: {
             isAuth: true,
-            title: 'Add Group Transactions'
+            title: 'Add Group Transactions',
+            type: "group"
           }
         },
         {
