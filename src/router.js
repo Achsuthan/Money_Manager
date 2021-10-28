@@ -154,7 +154,7 @@ const router = new Router({
     },
     {
       path: '*',
-      redirect: '/group',
+      redirect: '/',
     },
   ],
 })
