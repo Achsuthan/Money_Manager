@@ -45,9 +45,13 @@
                   color="success"
                   rounded
                   class="mx-2"
-                  to="/add_transaction/friend/"
+                  :to="
+                    friends.length > 0
+                      ? '/add_transaction/friend/'
+                      : '/search-friends'
+                  "
                 >
-                  Add Transaction
+                  Add {{ friends.length > 0 ? "Transaction" : "Friend" }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -61,7 +65,8 @@
                     class="text-h4 font-weight-regular text-wrap text-center"
                   >
                     <br />
-                    You don't have any {{friends.length >0 ? 'transactions' : 'friends'}}.
+                    You don't have any
+                    {{ friends.length > 0 ? "transactions" : "friends" }}.
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -73,9 +78,13 @@
                     <br />
                     <v-btn
                       color="primary"
-                      :to="friends.length >0 ? '/add_transaction/friend/' : '/search-friends'"
+                      :to="
+                        friends.length > 0
+                          ? '/add_transaction/friend/'
+                          : '/search-friends'
+                      "
                     >
-                      Add {{friends.length >0 ? 'Transaction' : 'Friend'}}
+                      Add {{ friends.length > 0 ? "Transaction" : "Friend" }}
                     </v-btn>
                   </v-list-item-subtitle>
                 </v-list-item-content>
@@ -170,10 +179,7 @@
                     class="text-h4 font-weight-regular text-wrap text-center"
                   >
                     <br />
-                    <v-btn
-                      color="primary"
-                      to="/add_transaction/own"
-                    >
+                    <v-btn color="primary" to="/add_transaction/own">
                       Add Transaction
                     </v-btn>
                   </v-list-item-subtitle>
@@ -217,7 +223,7 @@ export default {
     spent: 0.0,
     income: 0.0,
     expenses: 0.0,
-    friends:[],
+    friends: [],
   }),
   created() {
     this.getOwnTransacitons();
@@ -267,12 +273,12 @@ export default {
     },
     getFriends() {
       const payload = {
-        userId: JSON.parse(localStorage.getItem("user")).userId
-      }
+        userId: JSON.parse(localStorage.getItem("user")).userId,
+      };
       TransactionService.getAllFriendsByUserId(payload)
         .then((res) => {
           if (res.data.body.friends) {
-            this.friends = res.data.body.friends
+            this.friends = res.data.body.friends;
           }
         })
         .catch((err) => {});
