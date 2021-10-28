@@ -113,20 +113,23 @@
             </v-row>
             <v-row justify="start" class="pl-4">
               <span class="font-weight-bold text-h4">Selected Date: </span>
-              <span> {{ date ? date : "No date Selected" }} </span>
+              <span class="ml-2"> {{ date ? date : "No date Selected" }} </span>
             </v-row>
             <v-row justify="start" class="pl-4">
               <v-date-picker v-model="date" :max="getMaxDate()" />
             </v-row>
-            <v-btn
-              class="mr-4"
-              color="primary"
-              :disabled="isSubmitDisable"
-              @click="onSaveTransaction()"
-            >
-              submit
-            </v-btn>
-            <v-btn color="red" @click="onClear()"> clear </v-btn>
+
+            <v-row justify="start" class="pl-4 pb-4">
+              <v-btn color="red" @click="onClear()" class="mr-16 ml-4"> clear </v-btn>
+              <v-btn
+                class="mr-4"
+                color="primary"
+                :disabled="isSubmitDisable"
+                @click="onSaveTransaction()"
+              >
+                submit
+              </v-btn>
+            </v-row>
           </v-form>
         </base-material-card>
       </v-col>
