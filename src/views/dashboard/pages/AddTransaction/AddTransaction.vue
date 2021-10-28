@@ -120,7 +120,9 @@
             </v-row>
 
             <v-row justify="start" class="pl-4 pb-4">
-              <v-btn color="red" @click="onClear()" class="mr-16 ml-4"> clear </v-btn>
+              <v-btn color="red" @click="onClear()" class="mr-16 ml-4">
+                clear
+              </v-btn>
               <v-btn
                 class="mr-4"
                 color="primary"
@@ -174,6 +176,18 @@ export default {
           return [{ text: "Transfer", value: "transfer" }];
         default:
           return [{ text: "Transfer", value: "transfer" }];
+      }
+    },
+    totalPersentage() {
+      return this.selectFriend.length > 0
+        ? this.selectFriend.reduce((a, b) => a.persentage + b.persentage)
+        : 0;
+    },
+  },
+  watch: {
+    totalPersentage(val) {
+      if (val > 100) {
+        AlertHandler.errorMessage("Percentage can't be more than 100");
       }
     },
   },
@@ -274,6 +288,11 @@ export default {
 
         if (this.$route.meta.type === "group") {
           payload.groupId = this.$route.params.groupId;
+        }
+
+        if (this.totalPersentage > 100) {
+          AlertHandler.errorMessage("Percentage can't be more than 100");
+          return;
         }
 
         transactionService
