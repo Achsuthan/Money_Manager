@@ -4,22 +4,24 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-subtitle class="text-h4 font-weight-regular text-wrap">
-            <a
-              :href="link"
-              target="_blank"
-              class="green--text"
-            >
-              {{siteBaseUrl + "friendInvite=" + link}}
+            <a :href="siteBaseUrl + link" target="_blank" class="green--text">
+              {{ siteBaseUrl + link }}
             </a>
           </v-list-item-subtitle>
           <v-list-item-subtitle class="text-h4 font-weight-regular text-wrap">
-            <br/>
-            Request sent to : <span style="color: black;"> {{email}} </span>
+            <br />
+            Request sent to : <span style="color: black"> {{ email }} </span>
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-content class="text-right">
           <v-col v-if="isDelete">
-            <v-icon class="mr-0" color="red" v-on:click="$emit('deleteFriendsInvite',inviteId)"> mdi-delete </v-icon>
+            <v-icon
+              class="mr-0"
+              color="red"
+              v-on:click="$emit('deleteFriendsInvite', inviteId)"
+            >
+              mdi-delete
+            </v-icon>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -28,20 +30,19 @@
 </template>
 
 <script>
-import Config from '../../services/config'
+import Config from "../../services/config";
 export default {
   props: {
     link: String,
     inviteId: String,
     email: String,
-    isDelete: Boolean
+    isDelete: Boolean,
   },
-  data: ({ 
-    siteBaseUrl:""
-  }),
-  created(){
-    this.siteBaseUrl = Config.siteBaseUrl
+  data: {
+    siteBaseUrl: "",
+  },
+  created() {
+    this.siteBaseUrl = Config.siteBaseUrl;
   },
 };
 </script>
-

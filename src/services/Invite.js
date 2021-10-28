@@ -2,7 +2,7 @@ import instance from "@/services/instance.js";
 const getAllInvites = (payload) => {
   return instance.instance
     .get("/friend-invite?userId=" + payload.userId)
-    .then(function(response) {
+    .then(function (response) {
       return response;
     })
     .catch((error) => {
@@ -15,7 +15,7 @@ const getAllInvites = (payload) => {
 const getAllGroupInvites = (payload) => {
   return instance.instance
     .get("/group-invite?userId=" + payload.userId)
-    .then(function(response) {
+    .then(function (response) {
       return response;
     })
     .catch((error) => {
@@ -27,8 +27,8 @@ const getAllGroupInvites = (payload) => {
 
 const deleteFriendInviteId = (payload) => {
   return instance.instance
-    .delete("friend-invite?userId="+payload.userId+"&inviteId="+payload.inviteId)
-    .then(function(response) {
+    .delete("friend-invite?userId=" + payload.userId + "&inviteId=" + payload.inviteId)
+    .then(function (response) {
       return response;
     })
     .catch((error) => {
@@ -40,8 +40,8 @@ const deleteFriendInviteId = (payload) => {
 
 const deleteGroupInviteId = (payload) => {
   return instance.instance
-    .delete("group-invite?userId="+payload.userId+"&groupInviteId="+payload.groupInviteId)
-    .then(function(response) {
+    .delete("group-invite?userId=" + payload.userId + "&groupInviteId=" + payload.groupInviteId)
+    .then(function (response) {
       return response;
     })
     .catch((error) => {
@@ -54,7 +54,7 @@ const deleteGroupInviteId = (payload) => {
 const acceptGroupInvite = (payload) => {
   return instance.instance
     .post("accept_group_invite", payload)
-    .then(function(response) {
+    .then(function (response) {
       return response;
     })
     .catch((error) => {
@@ -67,7 +67,7 @@ const acceptGroupInvite = (payload) => {
 const sendGroupInvite = (payload) => {
   return instance.instance
     .post("group-invite", payload)
-    .then(function(response) {
+    .then(function (response) {
       return response;
     })
     .catch((error) => {
@@ -77,6 +77,20 @@ const sendGroupInvite = (payload) => {
     });
 };
 
+const getSingleInvite = (payload) => {
+  return instance.instance
+    .get(`/GetLinkDetails?inviteId=${payload.inviteId}`)
+    .then(function (response) {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+    });
+};
+
+
 export default {
   getAllInvites: getAllInvites,
   getAllGroupInvites: getAllGroupInvites,
@@ -84,4 +98,5 @@ export default {
   deleteGroupInviteId: deleteGroupInviteId,
   acceptGroupInvite: acceptGroupInvite,
   sendGroupInvite: sendGroupInvite,
+  getSingleInvite: getSingleInvite
 };

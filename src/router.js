@@ -153,8 +153,13 @@ const router = new Router({
       }
     },
     {
+      name: 'Invite',
+      path: '/invite/:inviteId',
+      component: () => import('@/views/dashboard/pages/Invite'),
+    },
+    {
       path: '*',
-      redirect: '/group',
+      redirect: '/',
     },
   ],
 })

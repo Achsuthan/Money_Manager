@@ -16,6 +16,7 @@
                   <v-text-field
                     label="Email"
                     :rules="[emailRule.required, emailRule.validate]"
+                    :disabled="isEmailDisable"
                     v-model="email"
                     class="purple-input"
                   />
@@ -80,6 +81,8 @@
 <script>
 import { emailVlidation } from "@/utils/validation";
 import LoginService from "@/services/login";
+import TransactionService from "@/services/Invite";
+
 import AlertHandler from "@/utils/alertHandle";
 export default {
   name: "DashboardIndex",
@@ -101,14 +104,43 @@ export default {
       required: (value) => !!value || "Please enter your email",
       validate: (v) => emailVlidation(v) || "Your email address is not valid",
     },
+    inviteId: "",
+    isEmailDisable: false,
   }),
+  mounted() {
+    if (this.$route.query.inviteId) {
+      this.isLogin = false;
+      this.onGetSingleInvite();
+    }
+  },
   methods: {
     switchLoginRegister() {
       this.$refs.form.reset();
-      this.isLogin = !this.isLogin;
+      const isLoginStatus = !this.isLogin;
+      this.isLogin = isLoginStatus;
+      this.isEmailDisable = false;
+
+      if (!isLoginStatus && this.$route.query.inviteId) {
+        this.onGetSingleInvite();
+      }
     },
     reset() {
       this.$refs.form.reset();
+    },
+    onGetSingleInvite() {
+      let payload = {
+        inviteId: this.$route.query.inviteId,
+      };
+      TransactionService.getSingleInvite(payload)
+        .then((res) => {
+          this.email = res.data.body.email;
+          this.inviteId = res.data.body.inviteId;
+          this.isEmailDisable = true;
+        })
+        .catch((err) => {
+          AlertHandler.errorMessage(err.message);
+          this.$router.push(`/login`);
+        });
     },
     login() {
       if (this.$refs.form.validate()) {
@@ -119,7 +151,7 @@ export default {
         LoginService.login(payload)
           .then((res) => {
             localStorage.setItem("user", JSON.stringify(res.data.body));
-            this.$router.push('/');
+            this.$router.push("/");
           })
           .catch((err) => {
             AlertHandler.errorMessage(err.message);
@@ -133,14 +165,22 @@ export default {
           password: this.password,
           name: this.name,
         };
+
+        if (this.$route.query.inviteId) {
+          payload.inviteId = this.$route.query.inviteId;
+        }
+
         LoginService.register(payload)
           .then((res) => {
-            AlertHandler.successMessage("You have registered successfully, please proceed to login")
+            AlertHandler.successMessage(
+              "You have registered successfully, please proceed to login"
+            );
             this.$refs.form.reset();
             this.isLogin = true;
           })
           .catch((err) => {
             AlertHandler.errorMessage(err.message);
+            this.switchLoginRegister();
           });
       }
     },

@@ -45,41 +45,53 @@
                   color="success"
                   rounded
                   class="mx-2"
-                  :to="`/add_transaction/group/${this.groupId}`"
+                  :to="
+                    friends.length > 0
+                      ? `/add_transaction/group/${this.groupId}`
+                      : `/search-friends-group/${this.groupId}`
+                  "
                 >
-                  Add Transaction
+                  Add {{ friends.length > 0 ? "transactions" : "Friends" }}
                 </v-btn>
               </v-col>
             </v-row>
           </v-col>
 
           <template v-if="groupTransactions.length == 0">
-              <v-card-text class="grow pa-0">
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-subtitle
-                      class="text-h4 font-weight-regular text-wrap text-center"
+            <v-card-text class="grow pa-0">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle
+                    class="text-h4 font-weight-regular text-wrap text-center"
+                  >
+                    <br />
+                    You don't have any
+                    {{ friends.length > 0 ? "transactions" : "friends" }} this
+                    group.
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle
+                    class="text-h4 font-weight-regular text-wrap text-center"
+                  >
+                    <br />
+                    <v-btn
+                      color="primary"
+                      :to="
+                        friends.length > 0
+                          ? `/add_transaction/group/${this.groupId}`
+                          : `/search-friends-group/${this.groupId}`
+                      "
                     >
-                      <br />
-                      You don't have any {{friends.length > 0 ? 'transactions' : 'friends'}} this group.
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-subtitle
-                      class="text-h4 font-weight-regular text-wrap text-center"
-                    >
-                      <br />
-                      <v-btn color="primary" :to="friends.length >0 ? `/add_transaction/group/${this.groupId}` : `/search-friends-group/${this.groupId}`">
-                        Add {{friends.length > 0 ? 'transactions' : 'Friends'}}
-                      </v-btn>
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card-text>
-            </template>
-
+                      Add {{ friends.length > 0 ? "transactions" : "Friends" }}
+                    </v-btn>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card-text>
+          </template>
 
           <template v-for="(item, index) in groupTransactions">
             <base-material-stats-card
@@ -127,31 +139,34 @@
             </v-list-item-content>
           </v-list-item>
           <template v-if="users.length == 0">
-              <v-card-text class="grow pa-0">
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-subtitle
-                      class="text-h4 font-weight-regular text-wrap text-center"
+            <v-card-text class="grow pa-0">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle
+                    class="text-h4 font-weight-regular text-wrap text-center"
+                  >
+                    <br />
+                    You don't Friends in to this group.
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle
+                    class="text-h4 font-weight-regular text-wrap text-center"
+                  >
+                    <br />
+                    <v-btn
+                      color="primary"
+                      :to="'/search-friends-group/' + this.groupId"
                     >
-                      <br />
-                      You don't Friends in to this group.
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-subtitle
-                      class="text-h4 font-weight-regular text-wrap text-center"
-                    >
-                      <br />
-                      <v-btn color="primary" :to="'/search-friends-group/' + this.groupId">
-                        Add friends to this group
-                      </v-btn>
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card-text>
-            </template>
+                      Add friends to this group
+                    </v-btn>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card-text>
+          </template>
           <template v-for="(item, index) in users">
             <base-single-person-card
               :key="index + 1"
@@ -159,7 +174,11 @@
               :name="item.userName"
             />
           </template>
-          <v-list-item class="grow mt-12" two-line v-if="groupInvites.length > 0">
+          <v-list-item
+            class="grow mt-12"
+            two-line
+            v-if="groupInvites.length > 0"
+          >
             <v-list-item-content>
               <v-list-item-title class="text-h5 font-weight-regular">
                 Invitations
@@ -192,7 +211,7 @@ export default {
   data: () => ({
     groupTransactions: [],
     users: [],
-    friends:[],
+    friends: [],
     groupInvites: [],
     groupId: "",
     groupName: "",
@@ -300,24 +319,20 @@ export default {
           AlertHandler.errorMessage(res.message);
         });
     },
-    getAllFriendsGroup(){
-
-      const payload = 
-      {
+    getAllFriendsGroup() {
+      const payload = {
         userId: JSON.parse(localStorage.getItem("user")).userId,
-        groupId: this.groupId
-      }
+        groupId: this.groupId,
+      };
 
-      TransactionService
-          .getAllGroupFriendsByUserId(payload)
-          .then((res) => {
-            if (res.data.body.users) {
-              this.friends = res.data.body.users
-            }
-          })
-          .catch((err) => {
-          });
-    }
+      TransactionService.getAllGroupFriendsByUserId(payload)
+        .then((res) => {
+          if (res.data.body.users) {
+            this.friends = res.data.body.users;
+          }
+        })
+        .catch((err) => {});
+    },
   },
 };
 </script>
