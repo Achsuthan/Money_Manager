@@ -59,33 +59,61 @@
             >
               <template v-slot:selection="{ item }">
                 <v-chip>
-                  <span>{{ $route.meta.type == 'group' ? `${item.userName} (${item.email})` : $route.meta.type == 'friend' ? `${item.name} (${item.email})` : ''}}</span>
+                  <span>{{
+                    $route.meta.type == "group"
+                      ? `${item.userName} (${item.email})`
+                      : $route.meta.type == "friend"
+                      ? `${item.name} (${item.email})`
+                      : ""
+                  }}</span>
                 </v-chip>
               </template>
             </v-select>
-              <span class="font-weight-bold text-h4"  v-if="selectFriend.length> 0">Selected Friend </span>
+            <br />
+            <v-row justify="start" class="pl-4">
+              <span
+                class="font-weight-bold text-h4"
+                v-if="selectFriend.length > 0"
+                >Selected Friend
+              </span>
+            </v-row>
+
             <v-row
-              justify="space-between"
+              justify="center"
               v-for="friend in selectFriend"
               :key="friend.userId"
             >
-              <v-col cols="6" md="6" align-self="right">
-                
-                {{ $route.meta.type == 'group' ? `${friend.userName} (${friend.email})` : $route.meta.type == 'friend' ? `${friend.name} (${friend.email})` : ''}}
-              </v-col>
-              <v-col cols="6" md="6">
-                <v-text-field
-                  label="Percentage"
-                  required
-                  v-model.number="friend.persentage"
-                  @keypress="isNumber($event)"
-                  :rules="amountRules"
-                />
+              <v-col cols="12" md="6">
+                <v-card elevation="0" class="text-wrap pa-0">
+                  <v-list-item class="grow pa-0">
+                    <v-list-item-content>
+                      <v-list-item-title class="text-wrap">
+                        {{
+                          $route.meta.type == "group"
+                            ? `${friend.userName} \n${friend.email}`
+                            : $route.meta.type == "friend"
+                            ? `${friend.name} ${friend.email}`
+                            : ""
+                        }}</v-list-item-title
+                      >
+                    </v-list-item-content>
+                    <v-spacer />
+                    <v-row align="center" justify="end">
+                      <v-text-field
+                        label="Percentage"
+                        required
+                        v-model.number="friend.persentage"
+                        @keypress="isNumber($event)"
+                        :rules="amountRules"
+                      />
+                    </v-row>
+                  </v-list-item>
+                </v-card>
               </v-col>
             </v-row>
             <v-row justify="start" class="pl-4">
               <span class="font-weight-bold text-h4">Selected Date: </span>
-            <span> {{ date ? date : "No date Selected" }} </span>
+              <span> {{ date ? date : "No date Selected" }} </span>
             </v-row>
             <v-row justify="start" class="pl-4">
               <v-date-picker v-model="date" :max="getMaxDate()" />
