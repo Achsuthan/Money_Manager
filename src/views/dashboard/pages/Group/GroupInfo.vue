@@ -127,6 +127,7 @@
             <v-list-item-content class="text-right">
               <v-list-item-title class="text-h5 font-weight-regular">
                 <v-btn
+                v-if="userId == groupOwnerId"
                   elevation="0"
                   fab
                   dark
@@ -215,11 +216,14 @@ export default {
     groupInvites: [],
     groupId: "",
     groupName: "",
+    groupOwnerId: "",
     youSpent: 0.0,
     youReceive: 0.0,
+    userId: ""
   }),
   created() {
     this.groupId = this.$route.params.id;
+    this.userId = JSON.parse(localStorage.getItem("user")).userId;
     this.getTransacitons();
     this.getUsersBasedOnGroup();
     this.getInviteLinks();
@@ -252,6 +256,10 @@ export default {
 
             if (res.data.body.groupName) {
               this.groupName = res.data.body.groupName;
+            }
+
+            if (res.data.body.groupOwnerId) {
+              this.groupOwnerId = res.data.body.groupOwnerId;
             }
           })
           .catch((err) => {});
@@ -300,8 +308,8 @@ export default {
         "You requested " +
         item.receiver.name +
         " to join to " +
-        item.groupName +
-        "group"
+        this.groupName +
+        " group"
       );
     },
     deleteGroupInvitation(invitationId) {
