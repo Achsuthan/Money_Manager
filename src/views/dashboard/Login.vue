@@ -92,7 +92,7 @@ export default {
     name: "",
     nameRule: {
       required: (value) => !!value || "Please enter your name.",
-      min: (v) => (v != null && v.length) >= 8 || "Min 8 characters",
+      min: (v) => !!v || "Min 8 characters",
     },
     password: "",
     passwordRule: {
@@ -177,6 +177,7 @@ export default {
             );
             this.$refs.form.reset();
             this.isLogin = true;
+            this.isEmailDisable = false
           })
           .catch((err) => {
             AlertHandler.errorMessage(err.message);
