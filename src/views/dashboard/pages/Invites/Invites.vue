@@ -230,7 +230,7 @@ export default {
           item.sender.name +
           " has request you to join to " +
           item.groupName +
-          "group"
+          " group"
         );
       } else {
         return (
@@ -238,7 +238,7 @@ export default {
           item.receiver.name +
           " to join to " +
           item.groupName +
-          "group"
+          " group"
         );
       }
     },
