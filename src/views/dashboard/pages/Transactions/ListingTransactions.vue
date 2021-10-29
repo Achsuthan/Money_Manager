@@ -94,7 +94,7 @@
 
           <template v-for="item in friendsTransactions">
             <base-material-stats-card
-              :color="item.category.color"
+              :color="item.category.categoryColor"
               :icon="item.category.imageName"
               :title="item.transactionName"
               :value="getAmount(item)"
