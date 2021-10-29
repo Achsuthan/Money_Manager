@@ -134,7 +134,7 @@
               </template>
             </template>
             <template v-else-if="i == 3">
-              <template v-if="sentRequest.length == 0">
+              <template v-if="receiveRequest.length == 0">
                 <v-card-text class="grow pa-0">
                   <v-list-item>
                     <v-list-item-content>
