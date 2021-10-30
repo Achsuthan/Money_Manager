@@ -10,8 +10,15 @@ Dependencies used for this projects are
 - [Moment.js](https://momentjs.com) used to handle the date format and converstion
 - [Vue Notification](https://www.npmjs.com/package/vue-notification) all the alert messages handle using this plugin
 
-In order to run this project npm and node.js required, which can be download from this [link](https://nodejs.org/en/download/). After the install the npm and node.js by executing this command the project will be up and running.
+In order to run this project npm and node.js required, which can be download from this [link](https://nodejs.org/en/download/). After the install the npm and node.js by executing this two command the project will be up and running.
 
+1. Install all the required third party plugins
+
+```
+npm install
+```
+
+2. To run the project
 ```
 npm run serve
 ```
