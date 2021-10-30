@@ -10,10 +10,16 @@ Dependencies used for this projects are
 - [Moment.js](https://momentjs.com) used to handle the date format and converstion
 - [Vue Notification](https://www.npmjs.com/package/vue-notification) all the alert messages handle using this plugin
 
-In order to run this project npm and node.js required, which can be download from this [link](https://nodejs.org/en/download/). After the install the npm and node.js by executing this command we can run this application.
+In order to run this project npm and node.js required, which can be download from this [link](https://nodejs.org/en/download/). After the install the npm and node.js by executing this command the project will be up and running.
 
 ```
 npm run serve
 ```
+
+Some of the dummy users are added to the database, 
+Email | password | 
+--- | --- |
+achsuthan@icloud.com | Pass@123 |
+achsuthan9314@gmail.com | Pass@123 |
 
 This project backend build using java the source code can be found from this [link](https://github.com/Achsuthan/money_manager_backend)
