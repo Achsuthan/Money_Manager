@@ -1,7 +1,7 @@
 <template>
   <v-container id="user-profile" fluid tag="section">
     <v-row justify="center">
-      <v-col cols="12" md="12">
+      <v-col cols="12" md="6">
         <base-material-card color="orange">
           <template v-slot:heading>
             <v-list-item class="grow pa-0" two-line>
@@ -113,7 +113,9 @@
             </v-row>
             <v-row justify="start" class="pl-4">
               <span class="font-weight-bold text-h4">Selected Date: </span>
-              <span class="ml-2"> {{ date ? date : "No date Selected" }} </span>
+              <span class="ml-2">
+                {{ date ? date : "No date Selected" }}
+              </span>
             </v-row>
             <v-row justify="start" class="pl-4">
               <v-date-picker v-model="date" :max="getMaxDate()" />
