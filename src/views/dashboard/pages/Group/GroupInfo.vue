@@ -19,7 +19,7 @@
                   <v-list-item-title class="text-h2 font-weight-regular">
                     $ {{ youReceive.toFixed(2) }}
                     <v-list-item-subtitle class="font-weight-bold">
-                      Received
+                      Due Amount
                     </v-list-item-subtitle>
                   </v-list-item-title>
                 </v-list-item-title>
